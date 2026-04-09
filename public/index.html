@@ -240,8 +240,74 @@
     </div>
     <div class="betslip-actions">
       <button class="btn-auto" id="btnAuto">AUTO</button>
-      <button class="btn-stake" id="btnStake">STAKE <span id="stakeDisplay">$1</span></button>
+      <button class="btn-stake" id="btnStake">STAKE<span id="stakeDisplay">$1</span></button>
       <button class="btn-play" id="btnPlay">PLAY ▶</button>
+    </div>
+  </div>
+
+  <!-- AUTO PLAY OPTIONS PANEL -->
+  <div class="autoplay-overlay" id="autoplayOverlay">
+    <div class="autoplay-panel">
+      <div class="autoplay-header">
+        <span class="autoplay-title">AUTO PLAY OPTIONS</span>
+        <button class="autoplay-close" id="autoplayClose">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="autoplay-stake">Stake: $ <strong id="autoplayStakeVal">1</strong> x</div>
+
+      <div class="autoplay-section">
+        <div class="autoplay-section-label">Number of Rounds</div>
+        <div class="autoplay-rounds">
+          <button class="autoplay-round-btn active" data-rounds="10">10</button>
+          <button class="autoplay-round-btn" data-rounds="25">25</button>
+          <button class="autoplay-round-btn" data-rounds="40">40</button>
+          <button class="autoplay-round-btn" data-rounds="50">50</button>
+        </div>
+        <div class="autoplay-risk">Total Risk: $<span id="autoplayTotalRisk">10</span></div>
+      </div>
+
+      <div class="autoplay-divider"></div>
+
+      <div class="autoplay-section">
+        <div class="autoplay-row">
+          <span class="autoplay-section-label">Loss Limit</span>
+          <div class="autoplay-limit-control">
+            <button class="autoplay-limit-btn" id="lossLimitMinus">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <div class="autoplay-limit-input-wrap">
+              <span class="autoplay-limit-currency">$</span>
+              <input type="number" class="autoplay-limit-input" id="lossLimitInput" value="10" min="1" max="9999">
+            </div>
+            <button class="autoplay-limit-btn" id="lossLimitPlus">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="autoplay-divider"></div>
+
+      <div class="autoplay-section">
+        <div class="autoplay-section-label">Single Win Limit</div>
+        <div class="autoplay-win-limit">
+          <button class="autoplay-win-btn" data-winlimit="10x" id="winLimit10x">10X STAKE</button>
+          <button class="autoplay-win-btn active" data-winlimit="none" id="winLimitNone">NO LIMIT</button>
+        </div>
+      </div>
+
+      <div class="autoplay-footer">
+        <label class="autoplay-skip">
+          <input type="checkbox" id="autoplaySkip">
+          <span class="autoplay-skip-toggle"></span>
+          <span>Skip To Results</span>
+        </label>
+        <button class="autoplay-activate" id="autoplayActivate">
+          ACTIVATE AUTO PLAY
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </button>
+      </div>
     </div>
   </div>
 

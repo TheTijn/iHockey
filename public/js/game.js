@@ -12,6 +12,16 @@ const state = {
   isPlaying: false,
   selectorSide: null, // 'home' or 'away'
   stakeInput: '1',
+  // Auto play
+  autoplay: {
+    rounds: 10,
+    lossLimit: 10,
+    winLimit: 'none', // 'none' or '10x'
+    skipResults: false,
+    active: false,
+    roundsLeft: 0,
+    totalLoss: 0,
+  },
 };
 
 // ===== DOM REFS =====
@@ -567,6 +577,132 @@ function autoBet() {
   updateBetslip();
 }
 
+// ===== AUTO PLAY OPTIONS PANEL =====
+function openAutoplayPanel() {
+  if (state.isPlaying) return;
+  updateAutoplayDisplay();
+  $('#autoplayOverlay').classList.add('visible');
+}
+
+function closeAutoplayPanel() {
+  $('#autoplayOverlay').classList.remove('visible');
+}
+
+function updateAutoplayDisplay() {
+  const ap = state.autoplay;
+  $('#autoplayStakeVal').textContent = state.stake;
+  $('#autoplayTotalRisk').textContent = (state.stake * ap.rounds).toFixed(0);
+
+  // Rounds buttons
+  $$('.autoplay-round-btn').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.dataset.rounds) === ap.rounds);
+  });
+
+  // Loss limit
+  $('#lossLimitInput').value = ap.lossLimit;
+
+  // Win limit
+  $('#winLimit10x').classList.toggle('active', ap.winLimit === '10x');
+  $('#winLimitNone').classList.toggle('active', ap.winLimit === 'none');
+}
+
+function activateAutoplay() {
+  const ap = state.autoplay;
+  ap.active = true;
+  ap.roundsLeft = ap.rounds;
+  ap.totalLoss = 0;
+  closeAutoplayPanel();
+  runAutoplayRound();
+}
+
+function runAutoplayRound() {
+  const ap = state.autoplay;
+  if (!ap.active || ap.roundsLeft <= 0) {
+    stopAutoplay();
+    return;
+  }
+
+  // Auto-pick bets
+  autoBet();
+
+  // Check balance
+  const totalCost = state.bets.length * state.stake;
+  if (totalCost > state.balance) {
+    stopAutoplay();
+    return;
+  }
+
+  // Play the game
+  state.isPlaying = true;
+  state.balance -= totalCost;
+  updateBalance();
+
+  document.body.classList.add('simulating');
+  $('#btnPlay').disabled = true;
+  $('#btnPlay').textContent = `AUTO ${ap.roundsLeft}`;
+
+  const delay = ap.skipResults ? 400 : 1500;
+
+  setTimeout(() => {
+    document.body.classList.remove('simulating');
+
+    const score = simulateMatch();
+    const results = evaluateBets(score);
+    const totalPayout = results.reduce((sum, r) => sum + r.payout, 0);
+    const netResult = totalPayout - totalCost;
+
+    state.balance += totalPayout;
+    updateBalance();
+
+    // Track losses
+    if (netResult < 0) {
+      ap.totalLoss += Math.abs(netResult);
+    }
+
+    ap.roundsLeft--;
+
+    // Check win limit
+    if (ap.winLimit === '10x' && totalPayout >= state.stake * 10) {
+      showResult(score, results, totalPayout);
+      stopAutoplay();
+      return;
+    }
+
+    // Check loss limit
+    if (ap.totalLoss >= ap.lossLimit * state.stake) {
+      showResult(score, results, totalPayout);
+      stopAutoplay();
+      return;
+    }
+
+    // Check rounds remaining
+    if (ap.roundsLeft <= 0) {
+      showResult(score, results, totalPayout);
+      stopAutoplay();
+      return;
+    }
+
+    if (ap.skipResults) {
+      // Skip result screen, go to next round
+      state.isPlaying = false;
+      $('#btnPlay').textContent = 'PLAY ▶';
+      loadNewMatch();
+      setTimeout(() => runAutoplayRound(), 200);
+    } else {
+      showResult(score, results, totalPayout);
+      // Override next button to continue autoplay
+      state._autoplayContinue = true;
+    }
+  }, delay);
+}
+
+function stopAutoplay() {
+  state.autoplay.active = false;
+  state.autoplay.roundsLeft = 0;
+  state._autoplayContinue = false;
+  $('#btnPlay').textContent = 'PLAY ▶';
+}
+
 // ===== STAKE PANEL =====
 function openStakePanel() {
   state.stakeInput = String(state.stake);
@@ -677,8 +813,54 @@ function bindEvents() {
 
   // Actions
   $('#btnPlay').addEventListener('click', playGame);
-  $('#btnAuto').addEventListener('click', autoBet);
+  $('#btnAuto').addEventListener('click', openAutoplayPanel);
   $('#btnStake').addEventListener('click', openStakePanel);
+
+  // Auto play panel
+  $('#autoplayClose').addEventListener('click', closeAutoplayPanel);
+  $('#autoplayOverlay').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeAutoplayPanel();
+  });
+
+  $$('.autoplay-round-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.autoplay.rounds = parseInt(btn.dataset.rounds);
+      updateAutoplayDisplay();
+    });
+  });
+
+  $('#lossLimitMinus').addEventListener('click', () => {
+    state.autoplay.lossLimit = Math.max(1, state.autoplay.lossLimit - 1);
+    updateAutoplayDisplay();
+  });
+  $('#lossLimitPlus').addEventListener('click', () => {
+    state.autoplay.lossLimit = Math.min(9999, state.autoplay.lossLimit + 1);
+    updateAutoplayDisplay();
+  });
+  $('#lossLimitInput').addEventListener('input', (e) => {
+    const val = parseInt(e.target.value);
+    if (!isNaN(val) && val >= 1) {
+      state.autoplay.lossLimit = Math.min(9999, val);
+    }
+  });
+  $('#lossLimitInput').addEventListener('blur', () => {
+    updateAutoplayDisplay();
+  });
+
+  $('#winLimit10x').addEventListener('click', () => {
+    state.autoplay.winLimit = '10x';
+    updateAutoplayDisplay();
+  });
+  $('#winLimitNone').addEventListener('click', () => {
+    state.autoplay.winLimit = 'none';
+    updateAutoplayDisplay();
+  });
+
+  $('#autoplaySkip').addEventListener('change', (e) => {
+    state.autoplay.skipResults = e.target.checked;
+  });
+
+  $('#autoplayActivate').addEventListener('click', activateAutoplay);
 
   // Stake panel
   $('#stakePanelClose').addEventListener('click', closeStakePanel);
@@ -700,9 +882,15 @@ function bindEvents() {
   // Next match
   $('#btnNext').addEventListener('click', () => {
     $('#resultOverlay').classList.remove('visible');
+    const shouldContinue = state._autoplayContinue;
+    state._autoplayContinue = false;
     setTimeout(() => {
       $('#btnPlay').textContent = 'PLAY ▶';
+      state.isPlaying = false;
       loadNewMatch();
+      if (shouldContinue && state.autoplay.active) {
+        setTimeout(() => runAutoplayRound(), 300);
+      }
     }, 300);
   });
 }

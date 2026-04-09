@@ -908,29 +908,30 @@ button {
 }
 
 // ===== ACTION BUTTONS =====
-.btn-auto {
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  color: $text-muted;
-  @include condensed(0.8rem, 700, 1.5px);
-  border-radius: $radius-lg;
-  text-transform: uppercase;
-  transition: background 0.15s;
-
-  &:hover { background: $bg-btn-hover; }
-}
-
+.btn-auto,
 .btn-stake {
-  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  min-width: 64px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid $border-light;
   color: $text-white;
-  @include condensed(0.8rem, 700, 1px);
+  @include condensed(0.75rem, 700, 1.2px);
   border-radius: $radius-lg;
   text-transform: uppercase;
   transition: background 0.15s;
+  line-height: 1.2;
 
   &:hover { background: $bg-btn-hover; }
+
+  span {
+    @include condensed(0.65rem, 600, 0.5px);
+    color: $text-muted;
+    margin-top: 1px;
+  }
 }
 
 .btn-play {
@@ -950,6 +951,285 @@ button {
     opacity: 0.3;
     cursor: not-allowed;
     transform: none;
+  }
+}
+
+// ===== AUTO PLAY OPTIONS =====
+.autoplay-overlay {
+  @include overlay-base;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  @include flex-center;
+  z-index: 450;
+  transition: opacity 0.25s ease;
+}
+
+.autoplay-panel {
+  background: $bg-panel;
+  border: 1px solid $border-light;
+  border-radius: $radius-lg;
+  width: 90%;
+  max-width: 360px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transform: scale(0.92) translateY(10px);
+  transition: transform 0.3s $ease-bounce;
+
+  .autoplay-overlay.visible & {
+    transform: scale(1) translateY(0);
+  }
+}
+
+.autoplay-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.autoplay-title {
+  @include condensed(1rem, 700, 1.5px);
+  text-transform: uppercase;
+}
+
+.autoplay-close {
+  background: none;
+  color: $text-muted;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+
+  &:hover { color: $text-white; }
+}
+
+.autoplay-stake {
+  @include condensed(0.9rem, 500, 0.5px);
+  color: $text-muted;
+
+  strong {
+    color: $text-white;
+    font-weight: 700;
+  }
+}
+
+.autoplay-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &-label {
+    @include condensed(0.8rem, 600, 0.5px);
+    color: $text-white;
+  }
+}
+
+.autoplay-rounds {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.autoplay-round-btn {
+  padding: 8px 4px;
+  background: rgba(255, 255, 255, 0.06);
+  color: $text-muted;
+  @include condensed(0.9rem, 700);
+  border-radius: $radius-md;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: $text-white;
+  }
+
+  &.active {
+    background: $accent;
+    color: $bg-primary;
+  }
+}
+
+.autoplay-risk {
+  @include condensed(0.85rem, 500, 0.5px);
+  color: $text-muted;
+
+  span {
+    color: $text-white;
+    font-weight: 700;
+  }
+}
+
+.autoplay-divider {
+  height: 1px;
+  background: $border-subtle;
+}
+
+.autoplay-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.autoplay-limit-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.autoplay-limit-btn {
+  @include flex-center;
+  width: 30px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.08);
+  color: $text-muted;
+  border-radius: $radius-sm;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: $text-white;
+  }
+}
+
+.autoplay-limit-input-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid $border-subtle;
+  border-radius: $radius-md;
+  padding: 0 10px;
+  height: 34px;
+  transition: border-color 0.15s ease;
+
+  &:focus-within {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.autoplay-limit-currency {
+  @include condensed(0.85rem, 600);
+  color: $text-muted;
+  margin-right: 2px;
+}
+
+.autoplay-limit-input {
+  width: 100%;
+  background: none;
+  border: none;
+  outline: none;
+  color: $text-white;
+  @include condensed(0.95rem, 700);
+  padding: 0;
+  text-align: right;
+  -moz-appearance: textfield;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+.autoplay-win-limit {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.autoplay-win-btn {
+  padding: 10px 8px;
+  @include condensed(0.8rem, 700, 1px);
+  border-radius: $radius-md;
+  text-transform: uppercase;
+  transition: all 0.15s ease;
+  background: rgba(255, 255, 255, 0.06);
+  color: $text-muted;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: $text-white;
+  }
+
+  &.active {
+    background: $accent;
+    color: $bg-primary;
+  }
+}
+
+.autoplay-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.autoplay-skip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  @include condensed(0.75rem, 600, 0.3px);
+  color: $text-muted;
+
+  input {
+    display: none;
+  }
+
+  &-toggle {
+    width: 34px;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 9px;
+    position: relative;
+    transition: background 0.2s ease;
+    flex-shrink: 0;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 14px;
+      height: 14px;
+      background: $text-muted;
+      border-radius: 50%;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+  }
+
+  input:checked + .autoplay-skip-toggle {
+    background: rgba($accent, 0.3);
+
+    &::after {
+      transform: translateX(16px);
+      background: $accent;
+    }
+  }
+}
+
+.autoplay-activate {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, $accent-gold, $accent-gold-dark);
+  color: $bg-primary;
+  @include condensed(0.8rem, 800, 1.5px);
+  border-radius: $radius-md;
+  text-transform: uppercase;
+  transition: opacity 0.2s, transform 0.1s;
+  white-space: nowrap;
+
+  &:hover { opacity: 0.92; }
+  &:active { transform: scale(0.97); }
+
+  svg {
+    opacity: 0.7;
   }
 }
 
