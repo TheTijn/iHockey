@@ -498,12 +498,14 @@ button {
   right: 0;
   z-index: 50;
   overflow: hidden;
+  overflow-y: auto;
   opacity: 0;
   background: #0d1528;
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 5px;
   left: 10px;
   right: 10px;
+  max-height: 60vh;
   box-shadow: 0 0 20px #191837;
   pointer-events: none;
   transform: translateY(-12px);
@@ -541,6 +543,10 @@ button {
   align-items: center;
   justify-content: space-between;
   padding: 10px 12px 6px;
+  position: sticky;
+  top: 0;
+  background: #0d1528;
+  z-index: 2;
 }
 .team-selector-title {
   font-family: "Barlow Condensed", sans-serif;

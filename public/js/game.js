@@ -805,6 +805,16 @@ function bindEvents() {
 
   // Team selector close
   $('#teamSelectorClose').addEventListener('click', closeTeamSelector);
+  // Close team selector when clicking outside it
+  document.addEventListener('click', (e) => {
+    const overlay = $('#teamSelectorOverlay');
+    if (!overlay.classList.contains('visible')) return;
+    const isInsideSelector = overlay.contains(e.target);
+    const isBadgeClick = e.target.closest('.team-badge-wrapper');
+    if (!isInsideSelector && !isBadgeClick) {
+      closeTeamSelector();
+    }
+  });
 
   // Betslip toggle
   $('#betslipSummary').addEventListener('click', () => {
