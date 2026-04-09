@@ -123,7 +123,7 @@ function buildTeamSelectorGrid() {
   const grid = $('#teamSelectorGrid');
   grid.innerHTML = TEAMS.map((team, i) => `
     <div class="team-selector-item" data-team-index="${i}">
-      <img src="assets/logos/${team.logo}" alt="${team.name}">
+      <img src="assets/team-badges/${team.logo}" alt="${team.name}">
       <span>${team.abbr}</span>
     </div>
   `).join('');
@@ -140,9 +140,13 @@ function openTeamSelector(side) {
   if (state.isPlaying || state.bets.length > 0) return;
   state.selectorSide = side;
 
+  const el = $('#teamSelectorOverlay');
+  const main = $('#mainContent');
+
   // Update active/disabled states
   const otherIndex = side === 'home' ? state.awayIndex : state.homeIndex;
   const currentIndex = side === 'home' ? state.homeIndex : state.awayIndex;
+  const teamColor = side === 'home' ? state.homeTeam.color : state.awayTeam.color;
 
   $$('.team-selector-item').forEach(item => {
     const idx = parseInt(item.dataset.teamIndex);
@@ -150,11 +154,25 @@ function openTeamSelector(side) {
     item.classList.toggle('disabled', idx === otherIndex);
   });
 
-  $('#teamSelectorOverlay').classList.add('visible');
+  // Position below the clicked badge
+  const badgeId = side === 'home' ? 'homeBadgeWrapper' : 'awayBadgeWrapper';
+  const badge = document.getElementById(badgeId);
+  const badgeRect = badge.getBoundingClientRect();
+  const mainRect = main.getBoundingClientRect();
+  const topOffset = badgeRect.bottom - mainRect.top + main.scrollTop + 4;
+  el.style.top = topOffset + 'px';
+
+  // Set side class and glow color
+  el.classList.remove('side-home', 'side-away');
+  el.classList.add(`side-${side}`);
+  el.style.setProperty('--selector-glow', teamColor);
+
+  el.classList.add('visible');
 }
 
 function closeTeamSelector() {
-  $('#teamSelectorOverlay').classList.remove('visible');
+  const el = $('#teamSelectorOverlay');
+  el.classList.remove('visible');
   state.selectorSide = null;
 }
 
@@ -177,12 +195,12 @@ function renderMatch() {
   $('#awayBadgeWrapper').style.setProperty('background', away.color);
 
   // Team info
-  $('#homeLogo').src = `assets/logos/${home.logo}`;
+  $('#homeLogo').src = `assets/team-badges/${home.logo}`;
   $('#homeLogo').alt = home.name;
   $('#homeAbbr').textContent = home.abbr;
   $('#homeName').textContent = home.name;
 
-  $('#awayLogo').src = `assets/logos/${away.logo}`;
+  $('#awayLogo').src = `assets/team-badges/${away.logo}`;
   $('#awayLogo').alt = away.name;
   $('#awayAbbr').textContent = away.abbr;
   $('#awayName').textContent = away.name;
@@ -491,9 +509,9 @@ function showResult(score, results, totalPayout) {
   const home = state.homeTeam;
   const away = state.awayTeam;
 
-  $('#resultHomeLogo').src = `assets/logos/${home.logo}`;
+  $('#resultHomeLogo').src = `assets/team-badges/${home.logo}`;
   $('#resultHomeAbbr').textContent = home.abbr;
-  $('#resultAwayLogo').src = `assets/logos/${away.logo}`;
+  $('#resultAwayLogo').src = `assets/team-badges/${away.logo}`;
   $('#resultAwayAbbr').textContent = away.abbr;
   $('#resultScore').textContent = `${score.home} - ${score.away}`;
 
@@ -651,9 +669,6 @@ function bindEvents() {
 
   // Team selector close
   $('#teamSelectorClose').addEventListener('click', closeTeamSelector);
-  $('#teamSelectorOverlay').addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) closeTeamSelector();
-  });
 
   // Betslip toggle
   $('#betslipSummary').addEventListener('click', () => {

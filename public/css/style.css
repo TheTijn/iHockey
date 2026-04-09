@@ -491,60 +491,65 @@ button {
   padding: 8px;
 }
 
-.team-selector-overlay {
-  position: fixed;
-  inset: 0;
+.team-selector {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  overflow: hidden;
   opacity: 0;
+  background: #0d1528;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 5px;
+  left: 10px;
+  right: 10px;
+  box-shadow: 0 0 20px #191837;
   pointer-events: none;
+  transform: translateY(-12px);
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
 }
-.team-selector-overlay.visible {
+.team-selector.visible {
   opacity: 1;
   pointer-events: all;
-}
-.team-selector-overlay {
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 400;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  transition: opacity 0.25s ease;
-}
-.team-selector-overlay.visible .team-selector-panel {
   transform: translateY(0);
 }
-
-.team-selector-panel {
-  background: #0d1528;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-bottom: none;
-  border-radius: 16px 16px 0 0;
-  width: 100%;
-  max-width: 420px;
-  max-height: 75vh;
-  overflow-y: auto;
-  padding: 16px;
-  transform: translateY(100%);
-  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+.team-selector.visible .team-selector-glow {
+  opacity: 0.5;
 }
-
+.team-selector.side-home .team-selector-glow {
+  left: -60px;
+}
+.team-selector.side-away .team-selector-glow {
+  right: -60px;
+  left: auto;
+}
+.team-selector-glow {
+  position: absolute;
+  top: -80px;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: var(--selector-glow, #1a3a5c);
+  filter: blur(50px) brightness(2.5) saturate(1.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
 .team-selector-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  padding: 10px 12px 6px;
 }
-
 .team-selector-title {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 1.5px;
   color: #8096ad;
   text-transform: uppercase;
 }
-
 .team-selector-close {
   background: none;
   color: #8096ad;
@@ -556,27 +561,28 @@ button {
 .team-selector-close:hover {
   color: #ffffff;
 }
-
 .team-selector-grid {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 6px;
+  gap: 4px;
+  padding: 0 12px 12px;
 }
-
 .team-selector-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
-  padding: 10px 4px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
+  gap: 3px;
+  padding: 6px 2px;
+  background: #162035;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 .team-selector-item:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: #1e2a42;
   border-color: rgba(255, 255, 255, 0.12);
 }
 .team-selector-item.active {
@@ -591,15 +597,15 @@ button {
   pointer-events: none;
 }
 .team-selector-item img {
-  width: 36px;
-  height: 36px;
+  width: 28px;
+  height: 28px;
   object-fit: contain;
 }
 .team-selector-item span {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.65rem;
+  font-size: 0.55rem;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
   color: #8899b4;
   text-transform: uppercase;
 }

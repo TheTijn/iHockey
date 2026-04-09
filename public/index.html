@@ -85,6 +85,20 @@
       </div>
     </section>
 
+    <!-- TEAM SELECTOR (overlays below selected team badge) -->
+    <div class="team-selector" id="teamSelectorOverlay">
+      <div class="team-selector-glow" id="teamSelectorGlow"></div>
+      <div class="team-selector-header">
+        <span class="team-selector-title" id="teamSelectorTitle">Select Team</span>
+        <button class="team-selector-close" id="teamSelectorClose">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="team-selector-grid" id="teamSelectorGrid">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
     <!-- MARKETS -->
     <section class="markets-section">
 
@@ -163,20 +177,6 @@
     </section>
   </main>
 
-  <!-- TEAM SELECTOR OVERLAY -->
-  <div class="team-selector-overlay" id="teamSelectorOverlay">
-    <div class="team-selector-panel">
-      <div class="team-selector-header">
-        <span class="team-selector-title" id="teamSelectorTitle">Select Team</span>
-        <button class="team-selector-close" id="teamSelectorClose">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-      <div class="team-selector-grid" id="teamSelectorGrid">
-        <!-- filled by JS -->
-      </div>
-    </div>
-  </div>
 
   <!-- BETSLIP (hidden until bets placed) -->
   <div class="betslip" id="betslip">
