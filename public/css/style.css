@@ -269,7 +269,7 @@ button {
 }
 
 .team-name {
-  font-size: 0.65rem;
+  font-size: 0.8rem;
   color: #8096ad;
   text-align: center;
   max-width: 120px;
@@ -545,7 +545,9 @@ button {
   padding: 10px 12px 6px;
   position: sticky;
   top: 0;
-  background: #0d1528;
+  background: rgba(13, 21, 40, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 2;
 }
 .team-selector-title {
@@ -573,7 +575,7 @@ button {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 4px;
-  padding: 0 12px 12px;
+  padding: 12px;
 }
 .team-selector-item {
   display: flex;
@@ -609,7 +611,7 @@ button {
 }
 .team-selector-item span {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.55rem;
+  font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.8px;
   color: #8899b4;
