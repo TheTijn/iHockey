@@ -1,0 +1,1067 @@
+// ===== VARIABLES =====
+$bg-primary: #0a1120;
+$bg-panel: #0d1528;
+$bg-stake: #1a2236;
+
+$text-white: #ffffff;
+$text-muted: #8096ad;
+$text-dim: #6b8099;
+$text-faint: #506a85;
+
+$accent: #4ecdc4;
+$accent-light: #80e8df;
+$accent-gold: #f5a623;
+$accent-gold-dark: #e8941e;
+$accent-red: #ff6b6b;
+
+$border-subtle: rgba(255, 255, 255, 0.06);
+$border-light: rgba(255, 255, 255, 0.08);
+$border-hover: rgba(255, 255, 255, 0.12);
+
+$bg-btn: rgba(255, 255, 255, 0.04);
+$bg-btn-hover: rgba(255, 255, 255, 0.08);
+$bg-btn-active: rgba(255, 255, 255, 0.15);
+
+$font-primary: 'Barlow', -apple-system, BlinkMacSystemFont, sans-serif;
+$font-condensed: 'Barlow Condensed', sans-serif;
+
+$max-width: 420px;
+$radius-sm: 4px;
+$radius-md: 6px;
+$radius-lg: 8px;
+$radius-xl: 16px;
+
+$ease-bounce: cubic-bezier(0.32, 0.72, 0, 1);
+
+// ===== MIXINS =====
+@mixin condensed($size, $weight: 700, $spacing: 0.5px) {
+  font-family: $font-condensed;
+  font-size: $size;
+  font-weight: $weight;
+  letter-spacing: $spacing;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin label-style {
+  @include condensed(0.7rem, 600, 1.5px);
+  color: $text-dim;
+  text-transform: uppercase;
+}
+
+@mixin card-bg {
+  background: $bg-btn;
+  border: 1px solid $border-subtle;
+  border-radius: $radius-md;
+}
+
+@mixin card-hover {
+  background: $bg-btn-hover;
+  border-color: $border-hover;
+}
+
+@mixin selected-state {
+  background: rgba($accent, 0.15);
+  border-color: $accent;
+}
+
+@mixin overlay-base {
+  position: fixed;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+// ===== RESET & BASE =====
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { font-size: 14px; }
+
+body {
+  font-family: $font-primary;
+  background: $bg-primary;
+  color: $text-white;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: inherit;
+}
+
+// ===== APP WRAPPER =====
+.app-width {
+  max-width: $max-width;
+  margin: 0 auto;
+}
+
+// ===== HEADER =====
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: $bg-panel;
+  border-bottom: 1px solid $border-subtle;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  max-width: $max-width;
+  margin: 0 auto;
+
+  &-left { display: flex; gap: 6px; }
+
+  &-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+  }
+
+  &-logo {
+    height: 32px;
+    width: auto;
+  }
+
+  &-right {}
+}
+
+.icon-btn {
+  background: none;
+  color: $text-muted;
+  padding: 6px;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+
+  &:hover { color: $text-white; }
+}
+
+.balance-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.balance-label {
+  @include condensed(0.6rem, 600, 1.5px);
+  color: $text-muted;
+  text-transform: uppercase;
+}
+
+.balance-amount {
+  @include condensed(1rem, 700, 0.5px);
+  color: $text-white;
+}
+
+// ===== MAIN CONTENT =====
+.main-content {
+  padding-bottom: 20px;
+  max-width: $max-width;
+  margin: 0 auto;
+  transition: padding-bottom 0.3s ease;
+  position: relative;
+  min-height: calc(100vh - 45px);
+  background: $bg-primary;
+
+  &.has-bets {
+    padding-bottom: 140px;
+  }
+
+  @media (min-height: 800px) {
+    min-height: auto;
+    max-height: 800px;
+    overflow-y: auto;
+  }
+}
+
+// Desktop styles
+@media (min-width: 480px) {
+  body {
+    background: $bg-primary url('../assets/bg-ice.jpg') center top / cover no-repeat;
+    padding-top: 20px;
+  }
+
+  .header {
+    border-radius: 10px 10px 0 0;
+  }
+
+  .main-content {
+    box-shadow: 0 0 20px #191837;
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+  }
+
+  .betslip {
+    border-radius: 0 0 10px 10px;
+  }
+}
+
+// ===== MATCH HEADER =====
+.match-header {
+  position: relative;
+  padding: 12px 16px 10px;
+  overflow: hidden;
+  background: $bg-primary;
+}
+
+// Radial glow layers
+.glow {
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.35;
+  pointer-events: none;
+  transition: background 0.5s ease;
+
+  &-home {
+    top: -60px;
+    left: -60px;
+    background: var(--home-color, #1a3a5c);
+  }
+
+  &-away {
+    top: -60px;
+    right: -60px;
+    background: var(--away-color, #5c1a1a);
+  }
+}
+
+.match-teams {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.match-vs {
+  @include condensed(0.8rem, 600, 2px);
+  color: $text-dim;
+  text-transform: uppercase;
+  padding-bottom: 32px;
+}
+
+.team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  flex: 1;
+}
+
+// Arrow buttons
+.team-arrow {
+  background: none;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 2px;
+  @include flex-center;
+  transition: all 0.25s ease;
+  border-radius: $radius-sm;
+  opacity: 1;
+  max-height: 26px;
+  overflow: hidden;
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.85);
+    transform: scale(1.15);
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+
+  &.hidden {
+    opacity: 0;
+    max-height: 0;
+    padding: 0;
+    pointer-events: none;
+  }
+}
+
+// Team badge
+.team-badge-wrapper {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  @include flex-center;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 2px solid $border-light;
+    pointer-events: none;
+  }
+
+  &:hover { transform: scale(1.06); }
+  &:active { transform: scale(0.96); }
+
+  &.locked {
+    cursor: default;
+    &:hover, &:active { transform: none; }
+  }
+}
+
+.home-badge { background: var(--home-color, #1a3a5c); }
+.away-badge { background: var(--away-color, #5c1a1a); }
+
+.team-badge {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.team-abbr {
+  @include condensed(1.4rem, 800, 2px);
+  text-transform: uppercase;
+}
+
+.team-name {
+  font-size: 0.65rem;
+  color: $text-muted;
+  text-align: center;
+  max-width: 120px;
+  line-height: 1.2;
+  letter-spacing: 0.3px;
+}
+
+// ===== H2H SECTION =====
+.h2h-section {
+  position: relative;
+  padding: 8px 0 0;
+}
+
+.section-label {
+  @include label-style;
+  margin-bottom: 6px;
+}
+
+.h2h-results {
+  display: flex;
+  gap: 6px;
+}
+
+.h2h-chip {
+  flex: 1;
+  text-align: center;
+  padding: 6px 4px;
+  background: none;
+  border: none;
+  border-radius: $radius-sm;
+  @include condensed(0.9rem, 700, 1px);
+  color: $text-muted;
+  user-select: none;
+  pointer-events: none;
+}
+
+// ===== MARKETS =====
+.markets-section {
+  padding: 8px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: fadeIn 0.3s ease;
+}
+
+.market-grid-3col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 5px;
+}
+
+.market-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &-header {
+    @include condensed(0.7rem, 700, 1.5px);
+    color: $text-dim;
+    text-align: center;
+    text-transform: uppercase;
+    padding-bottom: 1px;
+  }
+}
+
+.market-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.market-header {
+  @include condensed(0.75rem, 700, 1.5px);
+  color: $text-dim;
+  text-transform: uppercase;
+}
+
+// Odds buttons
+.odd-btn {
+  display: flex;
+  flex-direction: column;
+  @include flex-center;
+  gap: 0px;
+  padding: 6px;
+  @include card-bg;
+  color: $text-white;
+  transition: all 0.15s ease;
+
+  &:hover { @include card-hover; }
+
+  &.selected {
+    @include selected-state;
+
+    .odd-label { color: $accent-light; }
+  }
+}
+
+.odd-label {
+  @include condensed(0.7rem, 600, 0.5px);
+  color: $text-muted;
+  text-transform: uppercase;
+}
+
+.odd-value {
+  @include condensed(1.05rem, 700, 0.5px);
+}
+
+// Correct Score
+.correct-score-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.cs-col-header {
+  @include condensed(0.65rem, 600, 1px);
+  color: $text-dim;
+  text-align: center;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.cs-options {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 160px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: $border-light transparent;
+
+  &::-webkit-scrollbar { width: 3px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+  }
+}
+
+.cs-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  @include card-bg;
+  border-radius: 5px;
+  color: $text-white;
+  transition: all 0.15s ease;
+  cursor: pointer;
+
+  &:hover { @include card-hover; }
+  &.selected { @include selected-state; }
+}
+
+.cs-score {
+  @include condensed(0.85rem, 600, 1px);
+}
+
+.cs-odds {
+  @include condensed(0.9rem, 700);
+}
+
+.cs-scroll-hint {
+  text-align: center;
+  font-size: 0.6rem;
+  color: $text-faint;
+  padding-top: 3px;
+  letter-spacing: 0.5px;
+}
+
+// BTTS
+.btts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+
+.btts-btn {
+  padding: 8px;
+}
+
+// ===== TEAM SELECTOR OVERLAY =====
+.team-selector-overlay {
+  @include overlay-base;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 400;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transition: opacity 0.25s ease;
+
+  &.visible .team-selector-panel {
+    transform: translateY(0);
+  }
+}
+
+.team-selector-panel {
+  background: $bg-panel;
+  border: 1px solid $border-light;
+  border-bottom: none;
+  border-radius: $radius-xl $radius-xl 0 0;
+  width: 100%;
+  max-width: $max-width;
+  max-height: 75vh;
+  overflow-y: auto;
+  padding: 16px;
+  transform: translateY(100%);
+  transition: transform 0.3s $ease-bounce;
+}
+
+.team-selector-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.team-selector-title {
+  @include condensed(0.85rem, 600, 1.5px);
+  color: $text-muted;
+  text-transform: uppercase;
+}
+
+.team-selector-close {
+  background: none;
+  color: $text-muted;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+
+  &:hover { color: $text-white; }
+}
+
+.team-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+.team-selector-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 4px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: $radius-lg;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover { @include card-hover; }
+
+  &.active {
+    background: rgba($accent, 0.2);
+    border-color: $accent;
+
+    span { color: $accent; }
+  }
+
+  &.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+  }
+
+  span {
+    @include condensed(0.65rem, 700, 1px);
+    color: #8899b4;
+    text-transform: uppercase;
+  }
+}
+
+// ===== BETSLIP =====
+.betslip {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  right: auto;
+  background: $bg-panel;
+  border-top: 1px solid $border-subtle;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: $max-width;
+  transform: translateX(-50%) translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.3s $ease-bounce, opacity 0.2s ease;
+
+  &.visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  &.expanded {
+    .betslip-toggle { transform: rotate(180deg); }
+    .betslip-detail {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+  }
+
+  &-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    cursor: pointer;
+  }
+
+  &-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    @include condensed(0.72rem, 600, 0.8px);
+    color: $text-muted;
+    flex-wrap: wrap;
+
+    > span:first-child {
+      color: $text-white;
+      letter-spacing: 1.5px;
+    }
+  }
+
+  &-maxpay strong { color: $accent-gold; }
+
+  &-toggle {
+    background: none;
+    color: $text-muted;
+    padding: 4px;
+    transition: transform 0.3s;
+  }
+
+  &-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  &-bets {
+    padding: 0 16px 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  &-actions {
+    display: flex;
+    gap: 8px;
+    padding: 10px 16px 12px;
+  }
+}
+
+// Bet items
+.bet-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  @include card-bg;
+
+  &-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &-market {
+    @include condensed(0.6rem, 600, 1px);
+    color: $text-dim;
+    text-transform: uppercase;
+  }
+
+  &-selection {
+    @include condensed(0.85rem, 700, 0.5px);
+  }
+
+  &-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &-odds {
+    @include condensed(1.05rem, 700);
+  }
+
+  &-pay {
+    @include condensed(0.6rem, 400, 0.3px);
+    color: $accent-gold;
+  }
+
+  &-remove {
+    background: none;
+    color: $text-faint;
+    font-size: 1.1rem;
+    padding: 2px 6px;
+    border-radius: $radius-sm;
+    transition: color 0.2s;
+
+    &:hover { color: $accent-red; }
+  }
+}
+
+// ===== STAKE PANEL =====
+.stake-panel {
+  max-height: 0;
+  overflow: hidden;
+  background: $bg-stake;
+  transition: max-height 0.35s $ease-bounce;
+
+  &.open { max-height: 320px; }
+
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px 8px;
+  }
+
+  &-label {
+    @include condensed(0.8rem, 700, 1px);
+    color: $text-muted;
+  }
+
+  &-close {
+    @include flex-center;
+    width: 32px;
+    height: 32px;
+    background: none;
+    color: $text-muted;
+    transition: color 0.15s;
+
+    &:hover { color: $text-white; }
+  }
+}
+
+.stake-input-group {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: $radius-lg;
+  overflow: hidden;
+}
+
+.stake-adjust {
+  @include flex-center;
+  width: 36px;
+  height: 36px;
+  background: $bg-btn-hover;
+  color: $text-muted;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover {
+    background: $border-hover;
+    color: $text-white;
+  }
+}
+
+.stake-input-value {
+  min-width: 60px;
+  text-align: center;
+  @include condensed(1rem, 700);
+  color: $text-white;
+  padding: 0 8px;
+}
+
+.stake-presets {
+  display: flex;
+  gap: 6px;
+  padding: 6px 16px 10px;
+}
+
+.stake-preset {
+  flex: 1;
+  padding: 8px 4px;
+  background: rgba(255, 255, 255, 0.06);
+  color: $text-muted;
+  @include condensed(0.85rem, 700);
+  border-radius: $radius-md;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: $text-white;
+  }
+
+  &.active {
+    background: $accent-gold;
+    color: $bg-primary;
+  }
+}
+
+.stake-numpad {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  padding: 0 16px 12px;
+}
+
+.numpad-key {
+  padding: 12px 4px;
+  background: rgba(255, 255, 255, 0.06);
+  color: $text-white;
+  @include condensed(1rem, 600);
+  border-radius: $radius-md;
+  @include flex-center;
+  transition: background 0.15s;
+
+  &:hover { background: rgba(255, 255, 255, 0.1); }
+  &:active { background: $bg-btn-active; }
+}
+
+.numpad-confirm {
+  background: $bg-btn-hover;
+  color: $accent-gold;
+
+  &:hover { background: $border-hover; }
+}
+
+// ===== ACTION BUTTONS =====
+.btn-auto {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  color: $text-muted;
+  @include condensed(0.8rem, 700, 1.5px);
+  border-radius: $radius-lg;
+  text-transform: uppercase;
+  transition: background 0.15s;
+
+  &:hover { background: $bg-btn-hover; }
+}
+
+.btn-stake {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid $border-light;
+  color: $text-white;
+  @include condensed(0.8rem, 700, 1px);
+  border-radius: $radius-lg;
+  text-transform: uppercase;
+  transition: background 0.15s;
+
+  &:hover { background: $bg-btn-hover; }
+}
+
+.btn-play {
+  flex: 1;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, $accent-gold, $accent-gold-dark);
+  color: $bg-primary;
+  @include condensed(1.1rem, 800, 2px);
+  border-radius: $radius-lg;
+  text-transform: uppercase;
+  transition: opacity 0.2s, transform 0.1s;
+
+  &:hover { opacity: 0.92; }
+  &:active { transform: scale(0.98); }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+// ===== RESULT OVERLAY =====
+.result-overlay {
+  @include overlay-base;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  @include flex-center;
+  z-index: 500;
+  transition: opacity 0.3s ease;
+
+  &.visible .result-card { transform: scale(1); }
+}
+
+.result-card {
+  background: $bg-panel;
+  border: 1px solid $border-light;
+  border-radius: $radius-xl;
+  padding: 28px 24px;
+  width: 90%;
+  max-width: 380px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.result-title {
+  @include condensed(0.8rem, 700, 3px);
+  color: $text-dim;
+  text-transform: uppercase;
+}
+
+.result-score-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.result-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+
+  span {
+    @include condensed(1.05rem, 700, 1px);
+  }
+}
+
+.result-badge {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.result-score {
+  @include condensed(2.4rem, 800, 6px);
+  color: $text-white;
+}
+
+.result-outcomes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.result-outcome-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: $radius-md;
+  @include condensed(0.82rem, 600, 0.5px);
+
+  &.win {
+    background: rgba($accent, 0.12);
+    color: $accent;
+  }
+
+  &.lose {
+    background: rgba($accent-red, 0.08);
+    color: $accent-red;
+  }
+}
+
+.result-payout {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  @include condensed(1.1rem, 600, 1px);
+  padding-top: 4px;
+
+  strong {
+    color: $accent;
+    font-size: 1.5rem;
+    font-weight: 800;
+  }
+
+  .loss { color: $accent-red; }
+}
+
+.btn-next {
+  padding: 14px;
+  background: linear-gradient(135deg, $accent-gold, $accent-gold-dark);
+  color: $bg-primary;
+  @include condensed(1rem, 800, 2px);
+  border-radius: $radius-lg;
+  text-transform: uppercase;
+  transition: opacity 0.2s;
+
+  &:hover { opacity: 0.92; }
+}
+
+// ===== ANIMATIONS =====
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes teamSwap {
+  0% { opacity: 1; transform: scale(1); }
+  40% { opacity: 0; transform: scale(0.85); }
+  60% { opacity: 0; transform: scale(0.85); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.team-swapping .team-badge-wrapper {
+  animation: teamSwap 0.35s ease;
+}
+
+.simulating .btn-play {
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>iHockey</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <button class="icon-btn" id="btnHome" title="Home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </button>
+      <button class="icon-btn" id="btnHelp" title="Help">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </button>
+      <button class="icon-btn" id="btnHistory" title="History">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </button>
+    </div>
+    <div class="header-center">
+      <img class="header-logo" src="assets/logo.svg" alt="iHockey - Instant Ice Hockey">
+    </div>
+    <div class="header-right">
+      <div class="balance-box">
+        <span class="balance-label">BALANCE</span>
+        <span class="balance-amount" id="balanceDisplay">$976,035.28</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content" id="mainContent">
+
+    <!-- MATCH HEADER -->
+    <section class="match-header" id="matchHeader">
+      <!-- Radial glow layers -->
+      <div class="glow glow-home" id="glowHome"></div>
+      <div class="glow glow-away" id="glowAway"></div>
+
+      <div class="match-teams">
+        <div class="team team-home">
+          <button class="team-arrow arrow-up" data-side="home" data-dir="up">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 15 12 9 18 15"/></svg>
+          </button>
+          <div class="team-badge-wrapper home-badge" id="homeBadgeWrapper" data-side="home">
+            <img class="team-badge" id="homeLogo" src="" alt="">
+          </div>
+          <button class="team-arrow arrow-down" data-side="home" data-dir="down">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <span class="team-abbr" id="homeAbbr">PIT</span>
+          <span class="team-name" id="homeName">Pittsburgh Penguins</span>
+        </div>
+        <div class="match-vs">
+          <span>vs</span>
+        </div>
+        <div class="team team-away">
+          <button class="team-arrow arrow-up" data-side="away" data-dir="up">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 15 12 9 18 15"/></svg>
+          </button>
+          <div class="team-badge-wrapper away-badge" id="awayBadgeWrapper" data-side="away">
+            <img class="team-badge" id="awayLogo" src="" alt="">
+          </div>
+          <button class="team-arrow arrow-down" data-side="away" data-dir="down">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <span class="team-abbr" id="awayAbbr">VAN</span>
+          <span class="team-name" id="awayName">Vancouver Canucks</span>
+        </div>
+      </div>
+
+      <!-- H2H RESULTS (inside match header for gradient backdrop) -->
+      <div class="h2h-section">
+        <div class="section-label">LAST 5 H2H RESULTS:</div>
+        <div class="h2h-results" id="h2hResults">
+          <!-- filled by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- MARKETS -->
+    <section class="markets-section">
+
+      <!-- MONEY / SPREAD / TOTAL -->
+      <div class="market-grid-3col">
+        <div class="market-col">
+          <div class="market-col-header">MONEY</div>
+          <button class="odd-btn" data-market="money" data-selection="home">
+            <span class="odd-label" id="moneyHomeLabel">PIT</span>
+            <span class="odd-value" id="moneyHomeOdds">1.85</span>
+          </button>
+          <button class="odd-btn" data-market="money" data-selection="away">
+            <span class="odd-label" id="moneyAwayLabel">VAN</span>
+            <span class="odd-value" id="moneyAwayOdds">1.95</span>
+          </button>
+        </div>
+        <div class="market-col">
+          <div class="market-col-header">SPREAD</div>
+          <button class="odd-btn" data-market="spread" data-selection="home">
+            <span class="odd-label" id="spreadHomeLabel">PIT -1.5</span>
+            <span class="odd-value" id="spreadHomeOdds">2.40</span>
+          </button>
+          <button class="odd-btn" data-market="spread" data-selection="away">
+            <span class="odd-label" id="spreadAwayLabel">VAN +1.5</span>
+            <span class="odd-value" id="spreadAwayOdds">1.58</span>
+          </button>
+        </div>
+        <div class="market-col">
+          <div class="market-col-header">TOTAL</div>
+          <button class="odd-btn" data-market="total" data-selection="over">
+            <span class="odd-label">O 5.5</span>
+            <span class="odd-value" id="totalOverOdds">1.90</span>
+          </button>
+          <button class="odd-btn" data-market="total" data-selection="under">
+            <span class="odd-label">U 5.5</span>
+            <span class="odd-value" id="totalUnderOdds">1.90</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- CORRECT SCORE -->
+      <div class="market-section">
+        <div class="market-header">CORRECT SCORE</div>
+        <div class="correct-score-grid">
+          <div class="cs-column">
+            <div class="cs-col-header" id="csHomeHeader">PIT wins</div>
+            <div class="cs-options" id="csHomeOptions">
+              <!-- filled by JS -->
+            </div>
+          </div>
+          <div class="cs-column">
+            <div class="cs-col-header" id="csAwayHeader">VAN wins</div>
+            <div class="cs-options" id="csAwayOptions">
+              <!-- filled by JS -->
+            </div>
+          </div>
+        </div>
+        <div class="cs-scroll-hint">scroll for more ↓</div>
+      </div>
+
+      <!-- BTTS -->
+      <div class="market-section">
+        <div class="market-header">BTTS</div>
+        <div class="btts-grid">
+          <button class="odd-btn btts-btn" data-market="btts" data-selection="yes">
+            <span class="odd-label">Yes</span>
+            <span class="odd-value" id="bttsYesOdds">1.72</span>
+          </button>
+          <button class="odd-btn btts-btn" data-market="btts" data-selection="no">
+            <span class="odd-label">No</span>
+            <span class="odd-value" id="bttsNoOdds">2.05</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- TEAM SELECTOR OVERLAY -->
+  <div class="team-selector-overlay" id="teamSelectorOverlay">
+    <div class="team-selector-panel">
+      <div class="team-selector-header">
+        <span class="team-selector-title" id="teamSelectorTitle">Select Team</span>
+        <button class="team-selector-close" id="teamSelectorClose">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="team-selector-grid" id="teamSelectorGrid">
+        <!-- filled by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- BETSLIP (hidden until bets placed) -->
+  <div class="betslip" id="betslip">
+    <div class="betslip-summary" id="betslipSummary">
+      <div class="betslip-info">
+        <span>BETSLIP</span>
+        <span class="betslip-count" id="betCount">0 BETS</span>
+        <span class="betslip-stake" id="betTotalStake">$0 TOTAL STAKE</span>
+        <span class="betslip-maxpay">MAX PAY: <strong id="betMaxPay">$0</strong></span>
+      </div>
+      <button class="betslip-toggle" id="betslipToggle">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
+      </button>
+    </div>
+    <div class="betslip-detail" id="betslipDetail">
+      <div class="betslip-bets" id="betslipBets">
+        <!-- filled by JS -->
+      </div>
+    </div>
+    <div class="stake-panel" id="stakePanel">
+      <div class="stake-panel-header">
+        <span class="stake-panel-label">DEFAULT STAKE:</span>
+        <div class="stake-input-group">
+          <button class="stake-adjust" id="stakeMinus">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <span class="stake-input-value" id="stakeInputValue">$1</span>
+          <button class="stake-adjust" id="stakePlus">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+        <button class="stake-panel-close" id="stakePanelClose">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="stake-presets">
+        <button class="stake-preset active" data-amount="1">$1</button>
+        <button class="stake-preset" data-amount="5">$5</button>
+        <button class="stake-preset" data-amount="10">$10</button>
+        <button class="stake-preset" data-amount="20">$20</button>
+        <button class="stake-preset" data-amount="50">$50</button>
+      </div>
+      <div class="stake-numpad">
+        <button class="numpad-key" data-key="1">1</button>
+        <button class="numpad-key" data-key="2">2</button>
+        <button class="numpad-key" data-key="3">3</button>
+        <button class="numpad-key" data-key="4">4</button>
+        <button class="numpad-key" data-key="5">5</button>
+        <button class="numpad-key" data-key="6">6</button>
+        <button class="numpad-key" data-key="7">7</button>
+        <button class="numpad-key" data-key="8">8</button>
+        <button class="numpad-key" data-key="9">9</button>
+        <button class="numpad-key" data-key=".">.</button>
+        <button class="numpad-key" data-key="backspace">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 4H8l-7 8 7 8h13a2 2 0 002-2V6a2 2 0 00-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>
+        </button>
+        <button class="numpad-key numpad-confirm" data-key="confirm">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="betslip-actions">
+      <button class="btn-auto" id="btnAuto">AUTO</button>
+      <button class="btn-stake" id="btnStake">STAKE <span id="stakeDisplay">$1</span></button>
+      <button class="btn-play" id="btnPlay">PLAY ▶</button>
+    </div>
+  </div>
+
+  <!-- RESULT OVERLAY -->
+  <div class="result-overlay" id="resultOverlay">
+    <div class="result-card">
+      <div class="result-title" id="resultTitle">FULL TIME</div>
+      <div class="result-score-area">
+        <div class="result-team">
+          <img class="result-badge" id="resultHomeLogo" src="" alt="">
+          <span id="resultHomeAbbr">PIT</span>
+        </div>
+        <div class="result-score" id="resultScore">3 - 2</div>
+        <div class="result-team">
+          <img class="result-badge" id="resultAwayLogo" src="" alt="">
+          <span id="resultAwayAbbr">VAN</span>
+        </div>
+      </div>
+      <div class="result-outcomes" id="resultOutcomes">
+        <!-- filled by JS -->
+      </div>
+      <div class="result-payout">
+        <span>PAYOUT:</span>
+        <strong id="resultPayout">$0.00</strong>
+      </div>
+      <button class="btn-next" id="btnNext">NEXT MATCH</button>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
