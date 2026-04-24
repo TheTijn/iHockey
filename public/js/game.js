@@ -1,38 +1,17 @@
 // ===== VIDEO GOAL TIMELINE =====
-// Timeline is generated randomly each game; stored in ingame.timeline
-function generateMatchTimeline() {
-  const home = weightedRandomGoals();
-  const away = weightedRandomGoals();
-  const totalGoals = home + away;
-
-  if (totalGoals === 0) {
-    // 0-0 draw — no goal events, empty timeline
-    return { timeline: [], finalScore: { home: 0, away: 0 } };
-  }
-
-  // Build goal sequence: shuffle home/away scorers
-  const scorers = [...Array(home).fill('home'), ...Array(away).fill('away')]
-    .sort(() => Math.random() - 0.5);
-
-  // Spread timestamps across 8–98s with at least 5s between goals
-  const videoDuration = 98;
-  const minGap = 5;
-  const earliest = 8;
-  const times = [];
-  for (let i = 0; i < scorers.length; i++) {
-    const lo = (i === 0 ? earliest : times[i - 1] + minGap);
-    const hi = videoDuration - (scorers.length - 1 - i) * minGap;
-    times.push(lo + Math.random() * Math.max(0, hi - lo));
-  }
-
-  let h = 0, a = 0;
-  const timeline = scorers.map((scorer, i) => {
-    if (scorer === 'home') h++; else a++;
-    return { time: Math.round(times[i]), home: h, away: a };
-  });
-
-  return { timeline, finalScore: { home, away } };
-}
+// Fixed timeline matching the actual goals in IceHockeyGame-480.mp4
+const VIDEO_TIMELINE = [
+  { time:  8, home: 1, away: 0 },
+  { time: 17, home: 2, away: 0 },
+  { time: 29, home: 2, away: 1 },
+  { time: 39, home: 2, away: 2 },
+  { time: 48, home: 2, away: 3 },
+  { time: 59, home: 2, away: 4 },
+  { time: 79, home: 3, away: 4 },
+  { time: 91, home: 3, away: 5 },
+  { time: 100, home: 4, away: 5 },
+];
+const VIDEO_FINAL_SCORE = { home: 4, away: 5 };
 
 // ===== GAME STATE =====
 const state = {
@@ -533,8 +512,8 @@ function playGame() {
   setTimeout(() => {
     document.body.classList.remove('simulating');
 
-    const { timeline, finalScore: score } = generateMatchTimeline();
-    ingame.timeline = timeline;
+    ingame.timeline = VIDEO_TIMELINE;
+    const score = VIDEO_FINAL_SCORE;
 
     const results = evaluateBets(score);
     const totalPayout = results.reduce((sum, r) => sum + r.payout, 0);
