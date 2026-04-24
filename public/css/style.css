@@ -99,7 +99,7 @@ button {
   margin: 0 auto;
   transition: padding-bottom 0.3s ease;
   position: relative;
-  height: calc(100vh - 45px);
+  height: calc(100dvh - 45px);
   overflow-y: auto;
   background: #0a1120;
 }
@@ -691,7 +691,7 @@ button {
 .betslip-actions {
   display: flex;
   gap: 8px;
-  padding: 10px 16px 12px;
+  padding: 10px 16px max(12px, env(safe-area-inset-bottom));
 }
 
 .bet-item {

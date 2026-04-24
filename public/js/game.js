@@ -1094,20 +1094,7 @@ function adjustStake(delta) {
 
 // ===== BETSLIP POSITIONING =====
 function positionBetslip() {
-  const betslip = $('#betslip');
-  if (window.innerHeight > 800) {
-    // Tall viewport: anchor betslip to bottom of mainContent
-    const main = $('#mainContent');
-    const header = $('.header');
-    const headerHeight = header.getBoundingClientRect().height;
-    const mainMaxHeight = 800;
-    const mainBottom = headerHeight + mainMaxHeight;
-    const offset = window.innerHeight - mainBottom;
-    betslip.style.bottom = offset + 'px';
-  } else {
-    // Short viewport: betslip at viewport bottom
-    betslip.style.bottom = '0px';
-  }
+  $('#betslip').style.bottom = '0px';
 }
 
 // ===== EVENT BINDING =====
