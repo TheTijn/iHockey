@@ -38,6 +38,9 @@
   <!-- MAIN CONTENT -->
   <main class="main-content" id="mainContent">
 
+  <!-- GAME CONTENT (hidden during match) -->
+  <div id="gameContent">
+
     <!-- MATCH HEADER -->
     <section class="match-header" id="matchHeader">
       <!-- Radial glow layers -->
@@ -175,6 +178,102 @@
       </div>
 
     </section>
+
+  </div><!-- /#gameContent -->
+
+  <!-- IN-GAME VIEW (shown during match) -->
+  <div id="ingameView" class="ingame-view">
+
+    <!-- 16:9 video -->
+    <div class="ingame-video-wrap">
+      <video id="ingameVideo" class="ingame-video" muted playsinline>
+        <source src="assets/Video/IceHockeyGame-example.mp4" type="video/mp4">
+      </video>
+      <div class="ingame-live-badge">
+        <span class="ingame-live-dot"></span>LIVE
+      </div>
+      <div class="ingame-minute" id="ingameMinute">0:00</div>
+    </div>
+
+    <!-- Live score -->
+    <div class="ingame-score-bar" id="ingameScoreBar">
+      <div class="ingame-team-display">
+        <div class="ingame-badge-wrap" id="ingameHomeBadgeWrap">
+          <img class="ingame-badge" id="ingameHomeBadge" src="" alt="">
+        </div>
+        <span class="ingame-team-abbr" id="ingameHomeAbbr">PIT</span>
+      </div>
+      <div class="ingame-live-score">
+        <span class="ingame-score-num" id="ingameLiveHomeScore">0</span>
+        <span class="ingame-score-colon">:</span>
+        <span class="ingame-score-num" id="ingameLiveAwayScore">0</span>
+      </div>
+      <div class="ingame-team-display">
+        <div class="ingame-badge-wrap" id="ingameAwayBadgeWrap">
+          <img class="ingame-badge" id="ingameAwayBadge" src="" alt="">
+        </div>
+        <span class="ingame-team-abbr" id="ingameAwayAbbr">VAN</span>
+      </div>
+    </div>
+
+    <!-- Bet markets (filled by JS) -->
+    <div class="ingame-markets" id="ingameMarkets"></div>
+
+    <!-- Skip button -->
+    <div class="ingame-skip-wrap">
+      <button class="ingame-skip-btn" id="btnSkipIngame">
+        SKIP TO RESULTS
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+      </button>
+    </div>
+
+  </div><!-- /#ingameView -->
+
+  <!-- RESULT VIEW -->
+  <div class="result-overlay" id="resultOverlay">
+    <!-- Coins layer — covers full card -->
+    <div class="res-coins" id="resCoins" aria-hidden="true"></div>
+    <!-- Hero -->
+    <div class="res-hero" id="resHero">
+      <div class="res-rays" id="resRays"></div>
+      <div class="res-hero-inner">
+        <p class="res-eyebrow" id="resEyebrow">CONGRATULATIONS!</p>
+        <div class="res-headline" id="resHeadline">YOU WIN</div>
+        <div class="res-amount" id="resAmount"></div>
+      </div>
+    </div>
+    <!-- Score bar -->
+    <div class="res-score-bar" id="resScoreBar">
+      <div class="res-score-team">
+        <div class="res-score-badge-wrap"><img class="res-score-badge" id="resHomeBadge" src="" alt=""></div>
+        <span class="res-score-abbr" id="resHomeAbbr"></span>
+      </div>
+      <div class="res-score-nums">
+        <span class="res-score-num" id="resHomeScore">0</span>
+        <span class="res-score-sep">:</span>
+        <span class="res-score-num" id="resAwayScore">0</span>
+      </div>
+      <div class="res-score-team">
+        <div class="res-score-badge-wrap"><img class="res-score-badge" id="resAwayBadge" src="" alt=""></div>
+        <span class="res-score-abbr" id="resAwayAbbr"></span>
+      </div>
+    </div>
+    <!-- Bet slip cards -->
+    <div class="res-betslip" id="resBetslip"></div>
+    <!-- Footer -->
+    <div class="res-footer">
+      <button class="res-footer-btn" id="btnNext">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        NEW GAME
+      </button>
+      <div class="res-footer-sep"></div>
+      <button class="res-footer-btn" id="btnRebet">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        RE-BET
+      </button>
+    </div>
+  </div><!-- /#resultOverlay -->
+
   </main>
 
 
@@ -308,32 +407,6 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         </button>
       </div>
-    </div>
-  </div>
-
-  <!-- RESULT OVERLAY -->
-  <div class="result-overlay" id="resultOverlay">
-    <div class="result-card">
-      <div class="result-title" id="resultTitle">FULL TIME</div>
-      <div class="result-score-area">
-        <div class="result-team">
-          <img class="result-badge" id="resultHomeLogo" src="" alt="">
-          <span id="resultHomeAbbr">PIT</span>
-        </div>
-        <div class="result-score" id="resultScore">3 - 2</div>
-        <div class="result-team">
-          <img class="result-badge" id="resultAwayLogo" src="" alt="">
-          <span id="resultAwayAbbr">VAN</span>
-        </div>
-      </div>
-      <div class="result-outcomes" id="resultOutcomes">
-        <!-- filled by JS -->
-      </div>
-      <div class="result-payout">
-        <span>PAYOUT:</span>
-        <strong id="resultPayout">$0.00</strong>
-      </div>
-      <button class="btn-next" id="btnNext">NEXT MATCH</button>
     </div>
   </div>
 

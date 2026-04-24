@@ -180,7 +180,8 @@ button {
   margin: 0 auto;
   transition: padding-bottom 0.3s ease;
   position: relative;
-  min-height: calc(100vh - 45px);
+  height: calc(100vh - 45px);
+  overflow-y: auto;
   background: $bg-primary;
 
   &.has-bets {
@@ -188,9 +189,7 @@ button {
   }
 
   @media (min-height: 800px) {
-    min-height: auto;
-    max-height: 800px;
-    overflow-y: auto;
+    height: 800px;
   }
 }
 
@@ -1241,120 +1240,754 @@ button {
   }
 }
 
-// ===== RESULT OVERLAY =====
+// ===== RESULT VIEW =====
 .result-overlay {
-  @include overlay-base;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  @include flex-center;
-  z-index: 500;
-  transition: opacity 0.3s ease;
+  display: none;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background: $bg-primary;
 
-  &.visible .result-card { transform: scale(1); }
+  &.visible { display: flex; }
 }
 
-.result-card {
-  background: $bg-panel;
-  border: 1px solid $border-light;
-  border-radius: $radius-xl;
-  padding: 28px 24px;
-  width: 90%;
-  max-width: 380px;
-  text-align: center;
+.res-hero {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  width: 100%;
+  padding-bottom: 56.25%; // matches 16:9 video height
+  background: #060e1c;
+
+  &.win {
+    background: radial-gradient(ellipse at 50% 110%, rgba($accent-gold, 0.28) 0%, #060e1c 65%);
+
+    // Dark elliptical vignette between rays and text — boosts text contrast
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: radial-gradient(ellipse 65% 50% at 50% 50%, rgba(0, 0, 0, 0.72) 0%, transparent 100%);
+    }
+  }
+}
+
+.res-rays {
+  position: absolute;
+  // Oversized so scaled rays bleed to frame edges; hero clips overflow
+  inset: -100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  transform-origin: 50% 48%; // anchors to hero text centre (50% of 3× container)
+  background: conic-gradient(
+    from 0deg at 50% 48%,
+    transparent        0deg,
+    rgba($accent-gold, 0.32)  5deg,
+    transparent       11deg,
+    transparent       20deg,
+    rgba($accent-gold, 0.22) 25deg,
+    transparent       31deg,
+    transparent       40deg,
+    rgba($accent-gold, 0.32) 45deg,
+    transparent       51deg,
+    transparent       60deg,
+    rgba($accent-gold, 0.22) 65deg,
+    transparent       71deg,
+    transparent       80deg,
+    rgba($accent-gold, 0.32) 85deg,
+    transparent       91deg,
+    transparent      100deg,
+    rgba($accent-gold, 0.22) 105deg,
+    transparent      111deg,
+    transparent      120deg,
+    rgba($accent-gold, 0.32) 125deg,
+    transparent      131deg,
+    transparent      140deg,
+    rgba($accent-gold, 0.22) 145deg,
+    transparent      151deg,
+    transparent      160deg,
+    rgba($accent-gold, 0.32) 165deg,
+    transparent      171deg,
+    transparent      180deg,
+    rgba($accent-gold, 0.22) 185deg,
+    transparent      191deg,
+    transparent      200deg,
+    rgba($accent-gold, 0.32) 205deg,
+    transparent      211deg,
+    transparent      220deg,
+    rgba($accent-gold, 0.22) 225deg,
+    transparent      231deg,
+    transparent      240deg,
+    rgba($accent-gold, 0.32) 245deg,
+    transparent      251deg,
+    transparent      260deg,
+    rgba($accent-gold, 0.22) 265deg,
+    transparent      271deg,
+    transparent      280deg,
+    rgba($accent-gold, 0.32) 285deg,
+    transparent      291deg,
+    transparent      300deg,
+    rgba($accent-gold, 0.22) 305deg,
+    transparent      311deg,
+    transparent      320deg,
+    rgba($accent-gold, 0.32) 325deg,
+    transparent      331deg,
+    transparent      340deg,
+    rgba($accent-gold, 0.22) 345deg,
+    transparent      351deg,
+    transparent      360deg
+  );
+  animation: raysRotate 18s linear infinite;
+
+  .win & { opacity: 1; }
+}
+
+@keyframes raysRotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.res-hero-inner {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  transform: scale(0.9);
-  transition: transform 0.3s ease;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 4px;
+  padding: 0 20px;
 }
 
-.result-title {
-  @include condensed(0.8rem, 700, 3px);
+.res-coins {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+
+  .coin {
+    position: absolute;
+    font-size: var(--size, 1.3rem);
+    opacity: 0;
+    animation: coinBurst var(--dur, 1s) ease-out forwards;
+    animation-delay: var(--delay, 0s);
+  }
+}
+
+@keyframes coinBurst {
+  0%   { transform: translate(-50%, -50%) rotate(0deg) scale(0);   opacity: 0; }
+  8%   { transform: translate(-50%, -50%) rotate(calc(var(--rot, 360deg) * 0.05)) scale(1.6); opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--tx, 0px)), calc(-50% + var(--ty, 0px))) rotate(var(--rot, 360deg)) scale(0.1); opacity: 0; }
+}
+
+.res-eyebrow {
+  @include condensed(0.72rem, 600, 2.5px);
+  color: $text-muted;
+  text-transform: uppercase;
+  margin: 0;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9);
+}
+
+.res-headline {
+  @include condensed(2.6rem, 800, 2px);
+  color: $text-white;
+  line-height: 1;
+  text-transform: uppercase;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 1), 0 0 40px rgba(0, 0, 0, 0.8);
+}
+
+.res-amount {
+  @include condensed(2rem, 800, 1px);
+  color: $accent-gold;
+  line-height: 1.15;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+}
+
+// Score bar
+.res-score-bar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 28px;
+  background: $bg-panel;
+  border-bottom: 1px solid $border-subtle;
+  position: relative;
+  overflow: hidden;
+
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    top: -40px;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    filter: blur(44px);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  &::before { left: -30px; background: var(--res-home-color, transparent); }
+  &::after  { right: -30px; background: var(--res-away-color, transparent); }
+}
+
+.res-score-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.res-score-badge-wrap {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.res-score-badge {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.res-score-abbr {
+  @include condensed(0.88rem, 700, 1px);
+  color: $text-white;
+  text-transform: uppercase;
+}
+
+.res-score-nums {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.res-score-num {
+  @include condensed(2.8rem, 800, 0);
+  color: $text-white;
+  line-height: 1;
+
+  &.leading { color: $accent-gold; }
+}
+
+.res-score-sep {
+  @include condensed(2rem, 700, 0);
+  color: $text-muted;
+  line-height: 1;
+}
+
+// Bet slip
+.res-betslip {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.res-bet-card {
+  display: flex;
+  align-items: stretch;
+  background: $bg-panel;
+  border: 1px solid $border-subtle;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  min-height: 68px;
+
+  &.win {
+    border-color: rgba($accent-gold, 0.45);
+    background: linear-gradient(105deg, rgba($accent-gold, 0.09) 0%, $bg-panel 55%);
+  }
+}
+
+.res-bet-match {
+  flex-shrink: 0;
+  width: 64px;
+  background: rgba(0, 0, 0, 0.22);
+  border-right: 1px solid $border-subtle;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 4px;
+}
+
+.res-bet-mini-score {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.res-bet-mini-badge {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.res-bet-mini-result {
+  @include condensed(0.82rem, 700, 0);
+  color: $text-white;
+}
+
+.res-bet-mini-abbrs {
+  display: flex;
+  justify-content: space-between;
+  width: 52px;
+
+  span {
+    @include condensed(0.6rem, 600, 0.3px);
+    color: $text-muted;
+  }
+}
+
+.res-bet-info {
+  flex: 1;
+  padding: 9px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+.res-bet-placed-label {
+  @include condensed(0.62rem, 600, 1.5px);
   color: $text-dim;
   text-transform: uppercase;
 }
 
-.result-score-area {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-}
-
-.result-team {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-
-  span {
-    @include condensed(1.05rem, 700, 1px);
-  }
-}
-
-.result-badge {
-  width: 48px;
-  height: 48px;
-  object-fit: contain;
-}
-
-.result-score {
-  @include condensed(2.4rem, 800, 6px);
+.res-bet-type {
+  @include condensed(0.82rem, 700, 0.3px);
   color: $text-white;
 }
 
-.result-outcomes {
+.res-bet-stake {
+  @include condensed(0.72rem, 600, 0.3px);
+  color: $text-muted;
+  margin-top: 1px;
+}
+
+.res-bet-outcome {
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 9px 12px;
   gap: 4px;
 }
 
-.result-outcome-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
-  border-radius: $radius-md;
-  @include condensed(0.82rem, 600, 0.5px);
-
-  &.win {
-    background: rgba($accent, 0.12);
-    color: $accent;
-  }
-
-  &.lose {
-    background: rgba($accent-red, 0.08);
-    color: $accent-red;
-  }
+.res-bet-odds {
+  @include condensed(1.05rem, 800, 0);
+  color: $text-white;
 }
 
-.result-payout {
+.res-bet-result {
+  @include condensed(0.72rem, 700, 0.3px);
+
+  &.won  { color: $accent-gold; }
+  &.lost { color: $text-muted; }
+}
+
+// Footer
+.res-footer {
+  flex-shrink: 0;
   display: flex;
+  align-items: stretch;
+  padding: 12px 14px;
+  gap: 10px;
+  border-top: 1px solid $border-subtle;
+  background: $bg-primary;
+}
+
+.res-footer-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
   justify-content: center;
   gap: 8px;
-  @include condensed(1.1rem, 600, 1px);
-  padding-top: 4px;
+  padding: 11px 16px;
+  background: $bg-panel;
+  border: 1px solid $border-light;
+  border-radius: $radius-sm;
+  color: $text-muted;
+  @include condensed(0.78rem, 700, 2px);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
 
-  strong {
-    color: $accent;
-    font-size: 1.5rem;
-    font-weight: 800;
+  &:hover {
+    background: $bg-btn-hover;
+    color: $text-white;
+    border-color: $border-hover;
   }
-
-  .loss { color: $accent-red; }
 }
 
-.btn-next {
-  padding: 14px;
-  background: linear-gradient(135deg, $accent-gold, $accent-gold-dark);
-  color: $bg-primary;
-  @include condensed(1rem, 800, 2px);
-  border-radius: $radius-lg;
-  text-transform: uppercase;
-  transition: opacity 0.2s;
+.res-footer-sep {
+  width: 1px;
+  background: $border-subtle;
+  align-self: stretch;
+}
 
-  &:hover { opacity: 0.92; }
+// ===== IN-GAME VIEW =====
+.ingame-view {
+  display: none;
+
+  &.active {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+}
+
+// 16:9 video
+.ingame-video-wrap {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  background: #000;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.ingame-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ingame-live-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  background: #c62828;
+  color: $text-white;
+  @include condensed(0.7rem, 800, 1.5px);
+  padding: 3px 8px 3px 6px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-transform: uppercase;
+}
+
+.ingame-live-dot {
+  width: 6px;
+  height: 6px;
+  background: $text-white;
+  border-radius: 50%;
+  animation: igmBlink 1.1s ease-in-out infinite;
+}
+
+.ingame-minute {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  background: rgba($accent, 0.88);
+  color: $text-white;
+  @include condensed(0.82rem, 800, 0.5px);
+  padding: 3px 12px;
+  border-radius: 20px;
+  min-width: 42px;
+  text-align: center;
+}
+
+// Score bar pinned below video
+.ingame-score-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: $bg-panel;
+  border-bottom: 1px solid $border-subtle;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    filter: blur(50px);
+    opacity: 0.45;
+    pointer-events: none;
+    top: -60px;
+  }
+
+  &::before {
+    left: -40px;
+    background: var(--igm-home-color, #1a3a5c);
+  }
+
+  &::after {
+    right: -40px;
+    background: var(--igm-away-color, #5c1a1a);
+  }
+}
+
+.ingame-team-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  flex: 1;
+}
+
+.ingame-badge-wrap {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  @include flex-center;
+  flex-shrink: 0;
+}
+
+.ingame-badge {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.ingame-team-abbr {
+  @include condensed(1.35rem, 800, 1px);
+  color: $text-white;
+}
+
+.ingame-live-score {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  padding: 0 8px;
+}
+
+.ingame-score-num {
+  @include condensed(3rem, 800, 0);
+  color: $text-white;
+  line-height: 1;
+  &.score-leading { color: $accent-gold; }
+  min-width: 34px;
+  text-align: center;
+
+  &.score-bump { animation: igmScoreBump 0.45s $ease-bounce; }
+}
+
+.ingame-score-colon {
+  @include condensed(2.4rem, 700, 0);
+  color: rgba($text-white, 0.38);
+  line-height: 1;
+  margin-bottom: 3px;
+}
+
+// Scrollable market area — fills remaining space between score bar and skip footer
+.ingame-markets {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0; // required so flex child can shrink below content height
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+// Bet market sections
+.igm-section { border-bottom: 1px solid $border-subtle; }
+
+.igm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 14px 7px;
+  background: rgba($bg-panel, 0.7);
+
+  span {
+    @include condensed(0.73rem, 700, 1.5px);
+    color: $text-muted;
+    text-transform: uppercase;
+  }
+
+  svg { color: $text-dim; }
+}
+
+.igm-row {
+  display: flex;
+  gap: 6px;
+  padding: 8px 10px;
+}
+
+.igm-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 10px 11px;
+  @include card-bg;
+  cursor: default;
+  transition: background 0.3s ease, border-color 0.3s ease;
+
+  .igm-btn-label {
+    @include condensed(0.78rem, 600, 0.3px);
+    color: rgba($text-white, 0.32);
+    transition: color 0.3s;
+  }
+
+  .igm-btn-odds {
+    @include condensed(0.88rem, 700, 0);
+    color: rgba($text-white, 0.32);
+    transition: color 0.3s;
+  }
+
+  .igm-lock { color: rgba($text-white, 0.18); flex-shrink: 0; }
+
+  &.igm-selected-winning {
+    background: $accent-gold;
+    border-color: $accent-gold;
+    .igm-btn-label, .igm-btn-odds { color: $bg-primary; }
+    .igm-lock { display: none; }
+  }
+
+  &.igm-selected-losing {
+    background: #1d9457;
+    border-color: #1d9457;
+    .igm-btn-label, .igm-btn-odds { color: $text-white; }
+    .igm-lock { display: none; }
+  }
+
+  &.igm-current-winner {
+    background: rgba($accent-gold, 0.07);
+    border-color: rgba($accent-gold, 0.55);
+    .igm-btn-label, .igm-btn-odds { color: $accent-gold; }
+    .igm-lock { display: none; }
+  }
+}
+
+// Correct score grid
+.igm-cs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 6px;
+  padding: 6px 10px 10px;
+}
+
+.igm-cs-col { display: flex; flex-direction: column; gap: 3px; }
+
+.igm-cs-col-header {
+  @include condensed(0.65rem, 700, 1.5px);
+  color: $text-faint;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 5px 0 6px;
+}
+
+.igm-cs-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 6px 8px;
+  @include card-bg;
+  cursor: default;
+  transition: background 0.3s ease, border-color 0.3s ease;
+
+  .igm-cs-score {
+    @include condensed(0.78rem, 700, 0.3px);
+    color: rgba($text-white, 0.3);
+    transition: color 0.3s;
+  }
+
+  .igm-cs-odds {
+    @include condensed(0.75rem, 600, 0);
+    color: rgba($text-white, 0.28);
+    transition: color 0.3s;
+  }
+
+  .igm-lock { color: rgba($text-white, 0.16); flex-shrink: 0; }
+
+  &.igm-selected-winning {
+    background: $accent-gold;
+    border-color: $accent-gold;
+    .igm-cs-score, .igm-cs-odds { color: $bg-primary; }
+    .igm-lock { display: none; }
+  }
+
+  &.igm-selected-losing {
+    background: #1d9457;
+    border-color: #1d9457;
+    .igm-cs-score, .igm-cs-odds { color: $text-white; }
+    .igm-lock { display: none; }
+  }
+
+  &.igm-current-winner {
+    background: rgba($accent-gold, 0.07);
+    border-color: rgba($accent-gold, 0.55);
+    .igm-cs-score, .igm-cs-odds { color: $accent-gold; }
+    .igm-lock { display: none; }
+  }
+}
+
+// Skip button — fixed footer at bottom of in-game card
+.ingame-skip-wrap {
+  flex-shrink: 0;
+  padding: 12px 14px;
+  border-top: 1px solid $border-subtle;
+  background: $bg-primary;
+}
+
+.betslip.force-hidden { display: none !important; }
+
+.ingame-skip-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 16px;
+  background: $bg-panel;
+  border: 1px solid $border-light;
+  border-radius: $radius-sm;
+  color: $text-muted;
+  @include condensed(0.78rem, 700, 2px);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+
+  &:hover {
+    background: $bg-btn-hover;
+    color: $text-white;
+    border-color: $border-hover;
+  }
+
+  &:active { background: $bg-btn-active; }
+}
+
+@keyframes igmBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.15; }
+}
+
+@keyframes igmScoreBump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.5); color: $text-white; }
+  100% { transform: scale(1); }
 }
 
 // ===== ANIMATIONS =====

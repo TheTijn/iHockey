@@ -1,3 +1,39 @@
+// ===== VIDEO GOAL TIMELINE =====
+// Timeline is generated randomly each game; stored in ingame.timeline
+function generateMatchTimeline() {
+  const home = weightedRandomGoals();
+  const away = weightedRandomGoals();
+  const totalGoals = home + away;
+
+  if (totalGoals === 0) {
+    // 0-0 draw — no goal events, empty timeline
+    return { timeline: [], finalScore: { home: 0, away: 0 } };
+  }
+
+  // Build goal sequence: shuffle home/away scorers
+  const scorers = [...Array(home).fill('home'), ...Array(away).fill('away')]
+    .sort(() => Math.random() - 0.5);
+
+  // Spread timestamps across 8–98s with at least 5s between goals
+  const videoDuration = 98;
+  const minGap = 5;
+  const earliest = 8;
+  const times = [];
+  for (let i = 0; i < scorers.length; i++) {
+    const lo = (i === 0 ? earliest : times[i - 1] + minGap);
+    const hi = videoDuration - (scorers.length - 1 - i) * minGap;
+    times.push(lo + Math.random() * Math.max(0, hi - lo));
+  }
+
+  let h = 0, a = 0;
+  const timeline = scorers.map((scorer, i) => {
+    if (scorer === 'home') h++; else a++;
+    return { time: Math.round(times[i]), home: h, away: a };
+  });
+
+  return { timeline, finalScore: { home, away } };
+}
+
 // ===== GAME STATE =====
 const state = {
   balance: 976035.28,
@@ -497,14 +533,239 @@ function playGame() {
   setTimeout(() => {
     document.body.classList.remove('simulating');
 
-    const score = simulateMatch();
+    const { timeline, finalScore: score } = generateMatchTimeline();
+    ingame.timeline = timeline;
+
     const results = evaluateBets(score);
     const totalPayout = results.reduce((sum, r) => sum + r.payout, 0);
 
     state.balance += totalPayout;
     updateBalance();
-    showResult(score, results, totalPayout);
-  }, 1500);
+
+    showInGame(score, results, totalPayout);
+  }, 500);
+}
+
+// ===== IN-GAME VIEW =====
+const ingame = { timers: [], minuteInterval: null, finalScore: null, results: null, payout: null, timeline: [], goalIndex: 0 };
+
+function showInGame(score, results, payout) {
+  const home = state.homeTeam;
+  const away = state.awayTeam;
+
+  ingame.finalScore = score;
+  ingame.results = results;
+  ingame.payout = payout;
+
+  $('#ingameHomeBadge').src = `assets/team-badges/${home.logo}`;
+  $('#ingameHomeBadge').alt = home.name;
+  $('#ingameHomeAbbr').textContent = home.abbr;
+  $('#ingameAwayBadge').src = `assets/team-badges/${away.logo}`;
+  $('#ingameAwayBadge').alt = away.name;
+  $('#ingameAwayAbbr').textContent = away.abbr;
+  $('#ingameHomeBadgeWrap').style.background = home.color;
+  $('#ingameAwayBadgeWrap').style.background = away.color;
+  const scoreBar = $('#ingameScoreBar');
+  scoreBar.style.setProperty('--igm-home-color', home.color);
+  scoreBar.style.setProperty('--igm-away-color', away.color);
+
+  $('#ingameLiveHomeScore').textContent = '0';
+  $('#ingameLiveAwayScore').textContent = '0';
+  $('#ingameMinute').textContent = "0'";
+
+  buildIngameMarkets();
+  updateIngameBetStates({ home: 0, away: 0 });
+  updateScoreColors({ home: 0, away: 0 });
+
+  $('#gameContent').hidden = true;
+  $('#betslip').classList.add('force-hidden');
+  $('#mainContent').classList.remove('has-bets');
+  $('#mainContent').scrollTop = 0;
+  $('#ingameView').classList.add('active');
+
+  startIngameVideo();
+}
+
+function buildIngameMarkets() {
+  const home = state.homeTeam;
+  const away = state.awayTeam;
+  const lockIcon = `<svg class="igm-lock" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>`;
+  const chevron = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>`;
+  const labels = { money: 'Match Result', spread: 'Spread', total: 'Total Goals', btts: 'Both Teams Score', correctscore: 'Correct Score' };
+
+  let html = '';
+  for (const bet of state.bets) {
+    const { market } = bet;
+    const hdr = `<div class="igm-header"><span>${labels[market]}</span>${chevron}</div>`;
+
+    if (market === 'money') {
+      html += `<div class="igm-section">${hdr}<div class="igm-row">
+        <button class="igm-btn" data-market="money" data-selection="home"><span class="igm-btn-label">${home.abbr}</span><span class="igm-btn-odds">${state.odds.money[0].toFixed(2)}</span>${lockIcon}</button>
+        <button class="igm-btn" data-market="money" data-selection="away"><span class="igm-btn-label">${away.abbr}</span><span class="igm-btn-odds">${state.odds.money[1].toFixed(2)}</span>${lockIcon}</button>
+      </div></div>`;
+    } else if (market === 'spread') {
+      html += `<div class="igm-section">${hdr}<div class="igm-row">
+        <button class="igm-btn" data-market="spread" data-selection="home"><span class="igm-btn-label">${home.abbr} -1.5</span><span class="igm-btn-odds">${state.odds.spread[0].toFixed(2)}</span>${lockIcon}</button>
+        <button class="igm-btn" data-market="spread" data-selection="away"><span class="igm-btn-label">${away.abbr} +1.5</span><span class="igm-btn-odds">${state.odds.spread[1].toFixed(2)}</span>${lockIcon}</button>
+      </div></div>`;
+    } else if (market === 'total') {
+      html += `<div class="igm-section">${hdr}<div class="igm-row">
+        <button class="igm-btn" data-market="total" data-selection="over"><span class="igm-btn-label">O 5.5</span><span class="igm-btn-odds">${state.odds.total[0].toFixed(2)}</span>${lockIcon}</button>
+        <button class="igm-btn" data-market="total" data-selection="under"><span class="igm-btn-label">U 5.5</span><span class="igm-btn-odds">${state.odds.total[1].toFixed(2)}</span>${lockIcon}</button>
+      </div></div>`;
+    } else if (market === 'btts') {
+      html += `<div class="igm-section">${hdr}<div class="igm-row">
+        <button class="igm-btn" data-market="btts" data-selection="yes"><span class="igm-btn-label">Yes</span><span class="igm-btn-odds">${state.odds.btts[0].toFixed(2)}</span>${lockIcon}</button>
+        <button class="igm-btn" data-market="btts" data-selection="no"><span class="igm-btn-label">No</span><span class="igm-btn-odds">${state.odds.btts[1].toFixed(2)}</span>${lockIcon}</button>
+      </div></div>`;
+    } else if (market === 'correctscore') {
+      const homeScores = CORRECT_SCORES.home.map(s =>
+        `<button class="igm-cs-btn" data-market="correctscore" data-selection="${s}"><span class="igm-cs-score">${s}</span><span class="igm-cs-odds">${SCORE_ODDS[s].toFixed(2)}</span>${lockIcon}</button>`
+      ).join('');
+      const awayScores = CORRECT_SCORES.away.map(s =>
+        `<button class="igm-cs-btn" data-market="correctscore" data-selection="${s}"><span class="igm-cs-score">${s}</span><span class="igm-cs-odds">${SCORE_ODDS[s].toFixed(2)}</span>${lockIcon}</button>`
+      ).join('');
+      html += `<div class="igm-section">${hdr}
+        <div class="igm-cs-grid">
+          <div class="igm-cs-col"><div class="igm-cs-col-header">${home.abbr} wins</div>${homeScores}</div>
+          <div class="igm-cs-col"><div class="igm-cs-col-header">${away.abbr} wins</div>${awayScores}</div>
+        </div>
+      </div>`;
+    }
+  }
+  $('#ingameMarkets').innerHTML = html;
+}
+
+function getCurrentWinnerForMarket(market, score) {
+  const total = score.home + score.away;
+  switch (market) {
+    case 'money':
+      if (score.home > score.away) return 'home';
+      if (score.away > score.home) return 'away';
+      return null;
+    case 'spread':
+      if ((score.home - score.away) > 1.5) return 'home';
+      if ((score.away - score.home) >= -1.5) return 'away';
+      return null;
+    case 'total':
+      return total > 5.5 ? 'over' : 'under';
+    case 'btts':
+      return (score.home > 0 && score.away > 0) ? 'yes' : 'no';
+    case 'correctscore':
+      return `${score.home}-${score.away}`;
+    default:
+      return null;
+  }
+}
+
+function updateScoreColors(score) {
+  const homeEl = $('#ingameLiveHomeScore');
+  const awayEl = $('#ingameLiveAwayScore');
+  homeEl.classList.toggle('score-leading', score.home > score.away);
+  awayEl.classList.toggle('score-leading', score.away > score.home);
+}
+
+function updateIngameBetStates(score) {
+  for (const bet of state.bets) {
+    const { market } = bet;
+    const winner = getCurrentWinnerForMarket(market, score);
+    const cls = market === 'correctscore' ? 'igm-cs-btn' : 'igm-btn';
+
+    document.querySelectorAll(`#ingameMarkets .${cls}[data-market="${market}"]`).forEach(btn => {
+      const sel = btn.dataset.selection;
+      btn.classList.remove('igm-selected-winning', 'igm-selected-losing', 'igm-current-winner');
+
+      if (sel === bet.selection && sel === winner) {
+        btn.classList.add('igm-selected-winning');
+      } else if (sel === bet.selection) {
+        btn.classList.add('igm-selected-losing');
+      } else if (sel === winner) {
+        btn.classList.add('igm-current-winner');
+      }
+    });
+  }
+}
+
+function startIngameVideo() {
+  ingame.goalIndex = 0;
+  ingame.timers = [];
+
+  const video = $('#ingameVideo');
+  video.currentTime = 0;
+  video.play().catch(() => {});
+
+  video.addEventListener('timeupdate', onVideoTimeUpdate);
+  video.addEventListener('ended', onVideoEnded);
+}
+
+function onVideoTimeUpdate() {
+  const video = $('#ingameVideo');
+  const t = video.currentTime;
+
+  // Clock display (M:SS)
+  const m = Math.floor(t / 60);
+  const s = Math.floor(t % 60);
+  $('#ingameMinute').textContent = `${m}:${String(s).padStart(2, '0')}`;
+
+  // Trigger any goals whose timestamp we've passed
+  while (ingame.goalIndex < ingame.timeline.length && t >= ingame.timeline[ingame.goalIndex].time) {
+    const goal = ingame.timeline[ingame.goalIndex];
+    const prevHome = parseInt($('#ingameLiveHomeScore').textContent);
+    const prevAway = parseInt($('#ingameLiveAwayScore').textContent);
+
+    if (goal.home > prevHome) {
+      const el = $('#ingameLiveHomeScore');
+      el.textContent = goal.home;
+      el.classList.remove('score-bump');
+      void el.offsetWidth;
+      el.classList.add('score-bump');
+    }
+    if (goal.away > prevAway) {
+      const el = $('#ingameLiveAwayScore');
+      el.textContent = goal.away;
+      el.classList.remove('score-bump');
+      void el.offsetWidth;
+      el.classList.add('score-bump');
+    }
+    updateIngameBetStates({ home: goal.home, away: goal.away });
+    updateScoreColors({ home: goal.home, away: goal.away });
+    ingame.goalIndex++;
+  }
+}
+
+function onVideoEnded() {
+  detachVideoListeners();
+  ingame.timers.push(setTimeout(finishIngame, 1200));
+}
+
+function detachVideoListeners() {
+  const video = $('#ingameVideo');
+  video.removeEventListener('timeupdate', onVideoTimeUpdate);
+  video.removeEventListener('ended', onVideoEnded);
+}
+
+function skipIngame() {
+  detachVideoListeners();
+  ingame.timers.forEach(clearTimeout);
+  ingame.timers = [];
+  $('#ingameVideo').pause();
+  finishIngame();
+}
+
+function finishIngame() {
+  detachVideoListeners();
+  ingame.timers.forEach(clearTimeout);
+  const { finalScore, results, payout } = ingame;
+  const last = ingame.timeline.length > 0
+    ? ingame.timeline[ingame.timeline.length - 1]
+    : { home: finalScore.home, away: finalScore.away };
+  $('#ingameLiveHomeScore').textContent = last.home;
+  $('#ingameLiveAwayScore').textContent = last.away;
+  $('#ingameMinute').textContent = '1:40';
+  updateIngameBetStates({ home: last.home, away: last.away });
+  updateScoreColors({ home: last.home, away: last.away });
+  $('#ingameView').classList.remove('active');
+  showResult(finalScore, results, payout);
 }
 
 function updateBalance() {
@@ -516,33 +777,118 @@ function updateBalance() {
 
 // ===== RESULT DISPLAY =====
 function showResult(score, results, totalPayout) {
+  // Always hide game content — autoplay calls showResult directly without going through showInGame
+  $('#gameContent').hidden = true;
+  $('#betslip').classList.add('force-hidden');
+
   const home = state.homeTeam;
   const away = state.awayTeam;
+  const won = totalPayout > 0;
 
-  $('#resultHomeLogo').src = `assets/team-badges/${home.logo}`;
-  $('#resultHomeAbbr').textContent = home.abbr;
-  $('#resultAwayLogo').src = `assets/team-badges/${away.logo}`;
-  $('#resultAwayAbbr').textContent = away.abbr;
-  $('#resultScore').textContent = `${score.home} - ${score.away}`;
+  // Hero
+  const hero = $('#resHero');
+  hero.classList.toggle('win', won);
+  $('#resEyebrow').textContent = won ? 'CONGRATULATIONS!' : 'FULL TIME';
+  $('#resHeadline').textContent = won ? 'YOU WIN' : 'BETTER LUCK\nNEXT ROUND';
+  $('#resHeadline').style.whiteSpace = won ? '' : 'pre-line';
+  $('#resAmount').textContent = won ? `$${totalPayout.toFixed(2)}` : '';
 
-  const outcomesEl = $('#resultOutcomes');
-  outcomesEl.innerHTML = results.map(r => `
-    <div class="result-outcome-item ${r.win ? 'win' : 'lose'}">
-      <span>${r.description}: ${r.label}</span>
-      <span>${r.win ? '+$' + r.payout.toFixed(2) : 'LOST'}</span>
+  // Coins burst animation — show overlay first so layout is ready, then measure
+  $('#resCoins').innerHTML = '';
+  $('#resultOverlay').classList.add('visible');
+
+  if (won) {
+    requestAnimationFrame(() => {
+      const heroEl    = $('#resHero');
+      const overlayEl = $('#resultOverlay');
+      const hr = heroEl.getBoundingClientRect();
+      const or = overlayEl.getBoundingClientRect();
+      const cx = (hr.left + hr.width  / 2) - or.left;
+      const cy = (hr.top  + hr.height / 2) - or.top;
+
+      const coinsEl     = $('#resCoins');
+      const totalDur    = 5;
+      const coinCount   = 90;
+      const emojis      = ['🪙', '🪙', '🪙', '🪙', '💰', '💰', '⭐', '✨'];
+
+      for (let i = 0; i < coinCount; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        // bias: more coins shoot outward strongly, some lob high
+        const dist  = 120 + Math.random() * 340;
+        const tx    = Math.cos(angle) * dist;
+        const ty    = Math.sin(angle) * dist;
+        const dur   = 0.6 + Math.random() * 0.9;
+        const delay = Math.random() * (totalDur - dur);
+        const size  = 1.6 + Math.random() * 1.4;
+        const rot   = -720 + Math.random() * 1440; // spin up to 4 full turns
+
+        const coin = document.createElement('span');
+        coin.className = 'coin';
+        coin.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        coin.style.left = `${cx}px`;
+        coin.style.top  = `${cy}px`;
+        coin.style.setProperty('--tx',    `${tx}px`);
+        coin.style.setProperty('--ty',    `${ty}px`);
+        coin.style.setProperty('--rot',   `${rot}deg`);
+        coin.style.setProperty('--dur',   `${dur}s`);
+        coin.style.setProperty('--delay', `${delay}s`);
+        coin.style.setProperty('--size',  `${size}rem`);
+        coinsEl.appendChild(coin);
+      }
+    });
+  }
+
+  // Score bar colors
+  const scoreBar = $('#resScoreBar');
+  scoreBar.style.setProperty('--res-home-color', home.color);
+  scoreBar.style.setProperty('--res-away-color', away.color);
+
+  // Score bar values
+  $('#resHomeBadge').src = `assets/team-badges/${home.logo}`;
+  $('#resHomeAbbr').textContent = home.abbr;
+  $('#resAwayBadge').src = `assets/team-badges/${away.logo}`;
+  $('#resAwayAbbr').textContent = away.abbr;
+
+  const homeScoreEl = $('#resHomeScore');
+  const awayScoreEl = $('#resAwayScore');
+  homeScoreEl.textContent = score.home;
+  awayScoreEl.textContent = score.away;
+  homeScoreEl.classList.toggle('leading', score.home > score.away);
+  awayScoreEl.classList.toggle('leading', score.away > score.home);
+
+  // Bet slip cards
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
+  const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  const betId = Math.floor(1000000 + Math.random() * 9000000);
+
+  $('#resBetslip').innerHTML = results.map(r => `
+    <div class="res-bet-card ${r.win ? 'win' : ''}">
+      <div class="res-bet-match">
+        <div class="res-bet-mini-score">
+          <img class="res-bet-mini-badge" src="assets/team-badges/${home.logo}" alt="">
+          <span class="res-bet-mini-result">${score.home}:${score.away}</span>
+          <img class="res-bet-mini-badge" src="assets/team-badges/${away.logo}" alt="">
+        </div>
+        <div class="res-bet-mini-abbrs">
+          <span>${home.abbr}</span>
+          <span>${away.abbr}</span>
+        </div>
+      </div>
+      <div class="res-bet-info">
+        <span class="res-bet-placed-label">Bet Placed</span>
+        <span class="res-bet-type">${r.description}: ${r.label}</span>
+        <span class="res-bet-stake">${dateStr}, ${timeStr} &nbsp;·&nbsp; Stake: $${state.stake.toFixed(2)}</span>
+      </div>
+      <div class="res-bet-outcome">
+        <span class="res-bet-odds">${r.odds.toFixed(2)}</span>
+        <span class="res-bet-result ${r.win ? 'won' : 'lost'}">${r.win ? 'Won: $' + r.payout.toFixed(2) : 'No Win'}</span>
+      </div>
     </div>
   `).join('');
 
-  const payoutEl = $('#resultPayout');
-  if (totalPayout > 0) {
-    payoutEl.textContent = `+$${totalPayout.toFixed(2)}`;
-    payoutEl.className = '';
-  } else {
-    payoutEl.textContent = '$0.00';
-    payoutEl.className = 'loss';
-  }
-
-  $('#resultOverlay').classList.add('visible');
+  // For loss state, show overlay now (win state shows it earlier, before rAF coin setup)
+  if (!won) $('#resultOverlay').classList.add('visible');
 }
 
 // ===== AUTO BET =====
@@ -889,9 +1235,14 @@ function bindEvents() {
     });
   });
 
-  // Next match
+  // In-game skip
+  $('#btnSkipIngame').addEventListener('click', skipIngame);
+
+  // New game
   $('#btnNext').addEventListener('click', () => {
     $('#resultOverlay').classList.remove('visible');
+    $('#gameContent').hidden = false;
+    $('#betslip').classList.remove('force-hidden');
     const shouldContinue = state._autoplayContinue;
     state._autoplayContinue = false;
     setTimeout(() => {
@@ -902,5 +1253,14 @@ function bindEvents() {
         setTimeout(() => runAutoplayRound(), 300);
       }
     }, 300);
+  });
+
+  // Re-bet — same teams, same bets, back to betting screen
+  $('#btnRebet').addEventListener('click', () => {
+    $('#resultOverlay').classList.remove('visible');
+    $('#gameContent').hidden = false;
+    $('#betslip').classList.remove('force-hidden');
+    $('#btnPlay').textContent = 'PLAY ▶';
+    state.isPlaying = false;
   });
 }
