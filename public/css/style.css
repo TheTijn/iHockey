@@ -1493,12 +1493,35 @@ button {
   border-radius: 8px;
   overflow: hidden;
   min-height: 68px;
+  position: relative;
 }
 .res-bet-card.win {
   border-color: rgba(245, 166, 35, 0.45);
   background: linear-gradient(105deg, rgba(245, 166, 35, 0.09) 0%, #0d1528 55%);
 }
+.res-bet-card.win::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 20%, rgba(245, 166, 35, 0.18) 45%, rgba(255, 255, 255, 0.08) 50%, rgba(245, 166, 35, 0.18) 55%, transparent 80%);
+  background-size: 220% 100%;
+  background-position: 200% 0;
+  animation: cardShimmer 2.8s ease-in-out infinite;
+  pointer-events: none;
+  border-radius: inherit;
+}
 
+@keyframes cardShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  60% {
+    background-position: -40% 0;
+  }
+  100% {
+    background-position: -40% 0;
+  }
+}
 .res-bet-match {
   flex-shrink: 0;
   width: 64px;
