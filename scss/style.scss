@@ -351,6 +351,9 @@ button {
   max-width: 120px;
   line-height: 1.2;
   letter-spacing: 0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 // ===== H2H SECTION =====
