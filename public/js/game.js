@@ -1097,7 +1097,13 @@ function adjustStake(delta) {
 
 // ===== BETSLIP POSITIONING =====
 function positionBetslip() {
-  $('#betslip').style.bottom = '0px';
+  const betslip = $('#betslip');
+  const main = $('#mainContent');
+  const mainRect = main.getBoundingClientRect();
+  const offset = window.innerHeight - mainRect.bottom;
+  // On desktop the card doesn't reach the viewport bottom — anchor betslip to card bottom.
+  // On mobile (offset ≈ 0) bottom: 0 is correct; CSS env() handles safe-area.
+  betslip.style.bottom = Math.max(0, Math.round(offset)) + 'px';
 }
 
 // ===== EVENT BINDING =====
