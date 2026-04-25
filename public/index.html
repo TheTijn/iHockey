@@ -274,6 +274,113 @@
     </div>
   </div><!-- /#resultOverlay -->
 
+  <!-- HELP OVERLAY -->
+  <div class="help-overlay" id="helpOverlay" role="dialog" aria-modal="true" aria-label="Help">
+    <div class="help-panel">
+      <div class="help-header">
+        <span class="help-title">HELP</span>
+        <span class="help-version">V1.0</span>
+        <button class="help-close" id="btnHelpClose" aria-label="Close help">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="help-body">
+
+        <h2 class="help-section-title">GAME OBJECTIVE</h2>
+        <p class="help-text">iHockey is an instant virtual Hockey game. Select your team fixtures or hit the Randomise button to shuffle in a new pair. Place your bets, press Play, and if your prediction is correct, you win! Simple, exciting, and full of hockey thrills.</p>
+
+        <h3 class="help-sub-title">Playing the Game</h3>
+        <ol class="help-list">
+          <li>Confirm fixtures</li>
+          <li>Make Bet Selections</li>
+          <li>Select Place Bet</li>
+          <li>Once event is finished, select whether you want to play a new game or play the same teams again.</li>
+        </ol>
+
+        <h2 class="help-section-title">BET MARKETS</h2>
+        <ul class="help-list help-list--bullet">
+          <li><strong>Match Result (1 X 2)</strong> – Predict the team, either Home Wins (1) or Away Wins (2) the match, or the match has a Draw (X) result at full time.</li>
+          <li><strong>Period Result 1X2</strong> – Predict the result at the end of the first period. Home (1) / Draw (X) / Away (2).</li>
+          <li><strong>Goals: Over/Under 1.5</strong> – Predict 'Over' 1.5 to back a score of 2 or more total goals. Predict 'Under' 1.5 to back a score of 0 or 1 total goals.</li>
+          <li><strong>Goals: Over/Under 2.5</strong> – Predict 'Over' 2.5 to back a score of 3 or more total goals. Predict 'Under' 2.5 to back a score of 0 to 2 total goals.</li>
+          <li><strong>Goals: Over/Under 3.5</strong> – Predict 'Over' 3.5 to back a score of 4 or more total goals. Predict 'Under' 3.5 to back a score of 0 to 3 total goals.</li>
+          <li><strong>BTTS (Both Teams to Score)</strong> – Predict if both teams will score a goal in the match.
+            <ul class="help-list help-list--sub">
+              <li><span class="help-tag">Yes</span> – Both teams will score.</li>
+              <li><span class="help-tag">No</span> – Neither or only one team scores.</li>
+            </ul>
+          </li>
+          <li><strong>Correct Score</strong> – Predict full-time goal score for each team, both home and away; [Home – Away].</li>
+        </ul>
+
+        <h2 class="help-section-title">AUTO PLAY</h2>
+        <p class="help-text">Auto Play strikes bets and plays rounds for you.</p>
+        <ol class="help-list">
+          <li>Confirm fixture.</li>
+          <li>Select your bets.</li>
+          <li>Select Stake for the fixture.</li>
+          <li>Tap on the Auto Play button.</li>
+          <li>Select the Number of Rounds.</li>
+          <li><strong>Set Loss Limit:</strong> Set limit on loss for Auto Play. Auto Play stops if loss exceeds limit.</li>
+          <li><strong>Single Win Limit:</strong> Shows win limit on a single Round. Auto Play stops if win limit is exceeded on a bet. (10 × Stake / No Limit)</li>
+          <li>Tap "Skip to Results" to skip the event and view results.</li>
+          <li>Select "Activate Auto Play".</li>
+        </ol>
+        <ul class="help-list help-list--bullet">
+          <li>If "Skip to Result" is not selected, each round selected in "Number of Rounds" will be played individually.</li>
+          <li>While viewing each round, select "Skip to Result" to end the current round and view the result.</li>
+          <li>If Number of Rounds, Loss Limit, or Single Win Limit is reached, Auto Play will stop.</li>
+          <li>If "Click to Stop Auto Play" is selected, after the current round is completed, Auto Play will stop.</li>
+        </ul>
+
+        <h2 class="help-section-title">BETSLIP</h2>
+        <p class="help-text">The Betslip will show you all the selected bet markets, value of the stake, and possible winning amount per bet. You can edit the stake amount, remove a bet, set up "Auto Play," or start the game.</p>
+        <ul class="help-list help-list--bullet">
+          <li>Remove a bet by selecting the "Trashcan" next to the bet.</li>
+          <li>Select the Auto Play button to view "Auto Play" options.</li>
+          <li>Press the "Play" button when you are ready and the game will start.</li>
+          <li><strong>Stake:</strong> Selected value of the stake is set for all bets placed. (Stake per bet at selected Value)</li>
+        </ul>
+        <h3 class="help-sub-title">Change Stake on Betslip</h3>
+        <ul class="help-list help-list--bullet">
+          <li>Change your stake for the game by selecting the "+" or "−" or click on the Stake panel to open the full Stake Input Keypad.</li>
+          <li>Select stake value from the pre-selected amounts or type in your own stake amount.</li>
+          <li>Press the "Tick" to confirm the new stake amount.</li>
+        </ul>
+
+        <h2 class="help-section-title">GENERAL INFORMATION</h2>
+        <ul class="help-list help-list--bullet">
+          <li>On load, a fixture is randomised.</li>
+          <li>If a player wants to select their own teams, use the "Up" and "Down" arrows to change teams in the fixture.</li>
+          <li>Malfunction of the system voids all plays and pays.</li>
+          <li>No cancellation of bets allowed once confirmed by player.</li>
+          <li>The minimum bet, max bet, and maximum payout limits are set per operator.</li>
+          <li>Although rare, due to the nature of streaming, event commentary and streamed event information may be out of sync with event detail displayed on the interface. This has no effect on event outcomes.</li>
+          <li>Bets still result in the event of disconnection.</li>
+          <li>Teams can be changed at any stage before bets are placed by using the "Up" and "Down" arrows or by selecting the "Randomiser" button. (Note that bets will need to be selected again as team changes may change the Odds per fixture).</li>
+          <li>Payout details on the result screen display bet results for the event.</li>
+          <li>If the internet connection is lost, all bets will be resolved within 30 minutes.</li>
+          <li>A Random Number Generator determines the event results.</li>
+        </ul>
+
+        <h2 class="help-section-title">RTP (RETURN TO PLAYER)</h2>
+        <p class="help-text"><strong>RTP: 85% – 94.62%</strong></p>
+        <ul class="help-list help-list--bullet">
+          <li>RTP is an Average Based System.</li>
+          <li><strong>RTP Value:</strong> RTP changes based on the Bet Market selected when the bet is placed.</li>
+          <li>RTP refers to the percentage of value a game is designed to pay back to the player over time.</li>
+          <li>RTP is based on an average set by the Game and by the Operator.</li>
+          <li>Average is not guaranteed on individual outcomes in the short term.</li>
+        </ul>
+        <h3 class="help-sub-title">RTP Example</h3>
+        <p class="help-text">For Example — RTP of 95%.<br>A game set to 95% RTP is expected to return 95 "units" for every 100 "units" played on Average. Average is not calculated on individual games played or in the short term.</p>
+        <h3 class="help-sub-title">How to achieve RTP</h3>
+        <p class="help-text">To reach RTP (based on average), the more rounds an individual player plays, the closer they get to achieving the average return as stated by the game's RTP.</p>
+
+      </div><!-- /.help-body -->
+    </div><!-- /.help-panel -->
+  </div><!-- /#helpOverlay -->
+
   </main>
 
 

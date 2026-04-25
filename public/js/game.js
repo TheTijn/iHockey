@@ -1213,6 +1213,17 @@ function bindEvents() {
   // In-game skip
   $('#btnSkipIngame').addEventListener('click', skipIngame);
 
+  // Help overlay
+  $('#btnHelp').addEventListener('click', () => {
+    $('#helpOverlay').classList.add('visible');
+  });
+  $('#btnHelpClose').addEventListener('click', () => {
+    $('#helpOverlay').classList.remove('visible');
+  });
+  $('#helpOverlay').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) $('#helpOverlay').classList.remove('visible');
+  });
+
   // New game
   $('#btnNext').addEventListener('click', () => {
     $('#resultOverlay').classList.remove('visible');
