@@ -478,11 +478,12 @@ function evaluateBets(score) {
         if (bet.selection === 'over') win = totalGoals > 5.5;
         else win = totalGoals < 5.5;
         break;
-      case 'btts':
+      case 'btts': {
         const bothScored = score.home > 0 && score.away > 0;
         if (bet.selection === 'yes') win = bothScored;
         else win = !bothScored;
         break;
+      }
       case 'correctscore':
         win = bet.selection === scoreStr;
         break;
@@ -629,7 +630,9 @@ function getCurrentWinnerForMarket(market, score) {
     case 'total':
       return total > 5.5 ? 'over' : 'under';
     case 'btts':
-      return (score.home > 0 && score.away > 0) ? 'yes' : 'no';
+      if (score.home > 0 && score.away > 0) return 'yes'; // both scored — resolved
+      if (score.home > 0 || score.away > 0) return 'no';  // only one team scored so far
+      return null; // 0:0 — no scoring yet, state is undecided
     case 'correctscore':
       return `${score.home}-${score.away}`;
     default:
