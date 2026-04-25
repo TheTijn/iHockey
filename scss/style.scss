@@ -105,6 +105,9 @@ button {
   border: none;
   outline: none;
   font-family: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+  background: none;
 }
 
 // ===== APP WRAPPER =====
@@ -2111,11 +2114,13 @@ button {
   flex-direction: column;
   background: $bg-primary;
   overflow: hidden;
+  margin-top: 45px; // sit below the fixed header on mobile
+  max-height: calc(100dvh - 45px);
 
   // on desktop, honour the card height/radius
   @media (min-width: 480px) {
     margin-top: 65px; // header height + body padding
-    max-height: 800px;
+    max-height: 80vh;
     border-radius: 0 0 10px 10px;
   }
 }

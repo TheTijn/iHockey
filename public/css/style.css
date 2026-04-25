@@ -22,6 +22,9 @@ button {
   border: none;
   outline: none;
   font-family: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+  background: none;
 }
 
 .app-width {
@@ -2203,11 +2206,13 @@ button {
   flex-direction: column;
   background: #0a1120;
   overflow: hidden;
+  margin-top: 45px;
+  max-height: calc(100dvh - 45px);
 }
 @media (min-width: 480px) {
   .help-panel {
     margin-top: 65px;
-    max-height: 800px;
+    max-height: 80vh;
     border-radius: 0 0 10px 10px;
   }
 }
