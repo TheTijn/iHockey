@@ -390,6 +390,9 @@ function updateBetslip() {
   // Toggle team arrows hidden when bets exist
   $$('.team-arrow').forEach(el => el.classList.toggle('hidden', count > 0));
 
+  // Disable randomize button when bets placed
+  $('#btnRandomize').disabled = count > 0;
+
   // Toggle badge wrapper locked when bets exist
   $('#homeBadgeWrapper').classList.toggle('locked', count > 0);
   $('#awayBadgeWrapper').classList.toggle('locked', count > 0);
@@ -1118,6 +1121,12 @@ function bindEvents() {
     btn.addEventListener('click', () => {
       cycleTeam(btn.dataset.side, btn.dataset.dir);
     });
+  });
+
+  // Randomize teams button
+  $('#btnRandomize').addEventListener('click', () => {
+    if (state.isPlaying || state.bets.length > 0) return;
+    loadNewMatch();
   });
 
   // Team badge click → open selector
