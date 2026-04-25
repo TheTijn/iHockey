@@ -7,6 +7,7 @@ $text-white: #ffffff;
 $text-muted: #8096ad;
 $text-dim: #6b8099;
 $text-faint: #506a85;
+$text-label: #bcc3cb;
 
 $accent: #4ecdc4;
 $accent-light: #80e8df;
@@ -49,7 +50,7 @@ $ease-bounce: cubic-bezier(0.32, 0.72, 0, 1);
 
 @mixin label-style {
   @include condensed(0.75rem, 600, 1.5px);
-  color: $text-dim;
+  color: $text-label;
   text-transform: uppercase;
 }
 
@@ -407,7 +408,7 @@ button {
 
   &-header {
     @include condensed(0.75rem, 700, 1.5px);
-    color: $text-dim;
+    color: $text-label;
     text-align: center;
     text-transform: uppercase;
     padding-bottom: 1px;
@@ -422,7 +423,7 @@ button {
 
 .market-header {
   @include condensed(0.75rem, 700, 1.5px);
-  color: $text-dim;
+  color: $text-label;
   text-transform: uppercase;
 }
 
