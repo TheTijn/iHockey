@@ -5,7 +5,7 @@
 }
 
 html {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 body {
@@ -78,7 +78,7 @@ button {
 
 .balance-label {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 1.5px;
   color: #8096ad;
@@ -283,7 +283,7 @@ button {
 
 .section-label {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 1.5px;
   color: #6b8099;
@@ -333,7 +333,7 @@ button {
 }
 .market-col-header {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 1.5px;
   color: #6b8099;
@@ -385,7 +385,7 @@ button {
 
 .odd-label {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.5px;
   color: #8096ad;
@@ -407,7 +407,7 @@ button {
 
 .cs-col-header {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 1px;
   color: #6b8099;
@@ -474,7 +474,7 @@ button {
 
 .cs-scroll-hint {
   text-align: center;
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   color: #506a85;
   padding-top: 3px;
   letter-spacing: 0.5px;
@@ -610,7 +610,7 @@ button {
 }
 .team-selector-item span {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.8px;
   color: #8899b4;
@@ -658,7 +658,7 @@ button {
   align-items: center;
   gap: 10px;
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.8px;
   color: #8096ad;
@@ -710,7 +710,7 @@ button {
 }
 .bet-item-market {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 1px;
   color: #6b8099;
@@ -735,8 +735,8 @@ button {
 }
 .bet-item-pay {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.6rem;
-  font-weight: 400;
+  font-size: 0.75rem;
+  font-weight: 600;
   letter-spacing: 0.3px;
   color: #f5a623;
 }
@@ -912,7 +912,7 @@ button {
 .btn-auto span,
 .btn-stake span {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.5px;
   color: #8096ad;
@@ -1011,7 +1011,7 @@ button {
 .autoplay-stake {
   font-family: "Barlow Condensed", sans-serif;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.5px;
   color: #8096ad;
 }
@@ -1062,7 +1062,7 @@ button {
 .autoplay-risk {
   font-family: "Barlow Condensed", sans-serif;
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.5px;
   color: #8096ad;
 }
@@ -1349,7 +1349,7 @@ button {
 }
 .res-eyebrow {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 2.5px;
   color: #8096ad;
@@ -1562,7 +1562,7 @@ button {
 }
 .res-bet-mini-abbrs span {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.3px;
   color: #8096ad;
@@ -1579,7 +1579,7 @@ button {
 
 .res-bet-placed-label {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 1.5px;
   color: #6b8099;
@@ -1596,7 +1596,7 @@ button {
 
 .res-bet-stake {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.3px;
   color: #8096ad;
@@ -1623,7 +1623,7 @@ button {
 
 .res-bet-result {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.3px;
 }
@@ -1711,7 +1711,7 @@ button {
   background: #c62828;
   color: #ffffff;
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 1.5px;
   padding: 3px 8px 3px 6px;
@@ -1870,7 +1870,7 @@ button {
 }
 .igm-header span {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.73rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 1.5px;
   color: #8096ad;
@@ -1965,7 +1965,7 @@ button {
 
 .igm-cs-col-header {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 1.5px;
   color: #506a85;
