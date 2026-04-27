@@ -901,8 +901,9 @@ button {
   color: #ffffff;
 }
 .stake-preset.active {
-  background: #f5a623;
-  color: #0a1120;
+  background: rgba(78, 205, 196, 0.15);
+  border: 1px solid #4ecdc4;
+  color: #80e8df;
 }
 
 .stake-numpad {

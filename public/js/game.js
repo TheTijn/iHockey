@@ -1257,5 +1257,6 @@ function bindEvents() {
     $('#betslip').classList.remove('force-hidden');
     $('#btnPlay').textContent = 'PLAY ▶';
     state.isPlaying = false;
+    updateBetslip();
   });
 }
