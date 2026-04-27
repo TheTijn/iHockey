@@ -230,9 +230,11 @@ button {
   max-height: 26px;
   overflow: hidden;
 }
-.team-arrow:hover {
-  color: rgba(255, 255, 255, 0.85);
-  transform: scale(1.15);
+@media (hover: hover) and (pointer: fine) {
+  .team-arrow:hover {
+    color: rgba(255, 255, 255, 0.85);
+    transform: scale(1.15);
+  }
 }
 .team-arrow:active {
   transform: scale(0.9);
@@ -263,8 +265,10 @@ button {
   border: 2px solid rgba(255, 255, 255, 0.08);
   pointer-events: none;
 }
-.team-badge-wrapper:hover {
-  transform: scale(1.06);
+@media (hover: hover) and (pointer: fine) {
+  .team-badge-wrapper:hover {
+    transform: scale(1.06);
+  }
 }
 .team-badge-wrapper:active {
   transform: scale(0.96);
@@ -406,11 +410,16 @@ button {
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 6px;
   color: #ffffff;
-  transition: all 0.15s ease;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease-out;
 }
-.odd-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.12);
+@media (hover: hover) and (pointer: fine) {
+  .odd-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+}
+.odd-btn:active {
+  transform: scale(0.97);
 }
 .odd-btn.selected {
   background: rgba(78, 205, 196, 0.15);
@@ -480,15 +489,19 @@ button {
   padding: 6px 10px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 6px;
   border-radius: 5px;
   color: #ffffff;
-  transition: all 0.15s ease;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease-out;
   cursor: pointer;
 }
-.cs-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.12);
+@media (hover: hover) and (pointer: fine) {
+  .cs-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+}
+.cs-btn:active {
+  transform: scale(0.97);
 }
 .cs-btn.selected {
   background: rgba(78, 205, 196, 0.15);
@@ -623,11 +636,16 @@ button {
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease-out;
 }
-.team-selector-item:hover {
-  background: #1e2a42;
-  border-color: rgba(255, 255, 255, 0.12);
+@media (hover: hover) and (pointer: fine) {
+  .team-selector-item:hover {
+    background: #1e2a42;
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+}
+.team-selector-item:active {
+  transform: scale(0.95);
 }
 .team-selector-item.active {
   background: rgba(78, 205, 196, 0.2);
@@ -669,12 +687,13 @@ button {
   transform: translateX(-50%) translateY(100%);
   opacity: 0;
   pointer-events: none;
-  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.2s ease;
+  transition: transform 0.18s ease-in, opacity 0.15s ease;
 }
 .betslip.visible {
   transform: translateX(-50%) translateY(0);
   opacity: 1;
   pointer-events: all;
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.2s ease;
 }
 .betslip.expanded .betslip-toggle {
   transform: rotate(180deg);
@@ -905,13 +924,16 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s;
+  transition: background 0.15s, transform 0.08s ease-out;
 }
-.numpad-key:hover {
-  background: rgba(255, 255, 255, 0.1);
+@media (hover: hover) and (pointer: fine) {
+  .numpad-key:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
 }
 .numpad-key:active {
   background: rgba(255, 255, 255, 0.15);
+  transform: scale(0.94);
 }
 
 .numpad-confirm {
@@ -1013,10 +1035,12 @@ button {
   flex-direction: column;
   gap: 14px;
   transform: scale(0.92) translateY(10px);
-  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.2s ease;
 }
 .autoplay-overlay.visible .autoplay-panel {
   transform: scale(1) translateY(0);
+  opacity: 1;
 }
 
 .autoplay-header {
@@ -1085,11 +1109,16 @@ button {
   font-weight: 700;
   letter-spacing: 0.5px;
   border-radius: 6px;
-  transition: all 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease-out;
 }
-.autoplay-round-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+@media (hover: hover) and (pointer: fine) {
+  .autoplay-round-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+  }
+}
+.autoplay-round-btn:active {
+  transform: scale(0.96);
 }
 .autoplay-round-btn.active {
   background: #4ecdc4;
@@ -1199,13 +1228,18 @@ button {
   letter-spacing: 1px;
   border-radius: 6px;
   text-transform: uppercase;
-  transition: all 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease-out;
   background: rgba(255, 255, 255, 0.06);
   color: #8096ad;
 }
-.autoplay-win-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+@media (hover: hover) and (pointer: fine) {
+  .autoplay-win-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+  }
+}
+.autoplay-win-btn:active {
+  transform: scale(0.96);
 }
 .autoplay-win-btn.active {
   background: #4ecdc4;
@@ -1289,14 +1323,21 @@ button {
 }
 
 .result-overlay {
-  display: none;
+  display: flex;
   flex-direction: column;
   height: 100%;
   overflow: hidden;
   background: #0a1120;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  transition: opacity 0.25s ease-out;
 }
 .result-overlay.visible {
-  display: flex;
+  opacity: 1;
+  pointer-events: all;
 }
 
 .res-hero {
@@ -1372,7 +1413,7 @@ button {
 
 @keyframes coinBurst {
   0% {
-    transform: translate(-50%, -50%) rotate(0deg) scale(0);
+    transform: translate(-50%, -50%) rotate(0deg) scale(0.8);
     opacity: 0;
   }
   8% {
@@ -1703,12 +1744,17 @@ button {
   letter-spacing: 2px;
   text-transform: uppercase;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.1s ease-out;
 }
-.res-footer-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.12);
+@media (hover: hover) and (pointer: fine) {
+  .res-footer-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+}
+.res-footer-btn:active {
+  transform: scale(0.97);
 }
 
 .res-footer-sep {
@@ -2116,6 +2162,7 @@ button {
 }
 .ingame-skip-btn:active {
   background: rgba(255, 255, 255, 0.15);
+  transform: scale(0.97);
 }
 
 @keyframes igmBlink {
@@ -2130,9 +2177,8 @@ button {
   0% {
     transform: scale(1);
   }
-  40% {
-    transform: scale(1.5);
-    color: #ffffff;
+  35% {
+    transform: scale(1.28);
   }
   100% {
     transform: scale(1);
@@ -2155,11 +2201,11 @@ button {
   }
   40% {
     opacity: 0;
-    transform: scale(0.85);
+    transform: scale(0.92);
   }
   60% {
     opacity: 0;
-    transform: scale(0.85);
+    transform: scale(0.95);
   }
   100% {
     opacity: 1;
@@ -2208,6 +2254,13 @@ button {
   overflow: hidden;
   margin-top: 45px;
   max-height: calc(100dvh - 45px);
+  transform: translateY(-10px);
+  opacity: 0;
+  transition: transform 0.25s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.2s ease;
+}
+.help-overlay.visible .help-panel {
+  transform: translateY(0);
+  opacity: 1;
 }
 @media (min-width: 480px) {
   .help-panel {
