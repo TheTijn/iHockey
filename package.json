@@ -6,7 +6,7 @@
   "scripts": {
     "sass": "sass scss/style.scss public/css/style.css",
     "sass:watch": "sass --watch scss/style.scss public/css/style.css",
-    "start": "npm run sass && node server.js",
+    "start": "node server.js",
     "dev": "npm run sass:watch & node --watch server.js"
   },
   "dependencies": {
