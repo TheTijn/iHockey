@@ -740,6 +740,8 @@ function showResult(score, results, totalPayout) {
   // Always hide game content — autoplay calls showResult directly without going through showInGame
   $('#gameContent').hidden = true;
   $('#betslip').classList.add('force-hidden');
+  $('#ingameVideo').pause();
+  $('#ingameView').classList.remove('active');
 
   const home = state.homeTeam;
   const away = state.awayTeam;
