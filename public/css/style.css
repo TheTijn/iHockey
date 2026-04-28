@@ -1871,9 +1871,28 @@ button {
   overflow-y: auto;
   min-height: 0;
   scrollbar-width: none;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 .ingame-markets::-webkit-scrollbar {
   display: none;
+}
+
+.igm-bet-card {
+  cursor: default;
+}
+.igm-bet-card .res-bet-outcome {
+  padding-right: 14px;
+  justify-content: center;
+}
+.res-bet-card.igm-winning {
+  border-color: rgba(13, 148, 136, 0.6);
+  background: linear-gradient(105deg, rgba(13, 148, 136, 0.18) 0%, rgba(4, 40, 37, 0.28) 100%);
+}
+.res-bet-card.igm-losing {
+  opacity: 0.65;
 }
 
 .igm-section {
@@ -2402,6 +2421,7 @@ button {
 
 .history-body {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: 12px;
   display: flex;
@@ -2421,6 +2441,7 @@ button {
 }
 
 .history-entry {
+  flex-shrink: 0;
   background: #0d1528;
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 8px;

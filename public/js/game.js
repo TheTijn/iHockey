@@ -566,23 +566,33 @@ function showInGame(score, results, payout) {
 }
 
 function buildIngameMarkets() {
-  const lockIcon = `<svg class="igm-lock" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>`;
+  const home = state.homeTeam;
+  const away = state.awayTeam;
   const labels = { money: 'Match Result', spread: 'Spread', total: 'Total Goals', btts: 'Both Teams Score', correctscore: 'Correct Score' };
 
-  // Condensed slip: one row per selected bet (no unselected options shown)
-  let html = '';
-  for (const bet of state.bets) {
-    html += `<div class="igm-section">
-      <div class="igm-header"><span>${labels[bet.market]}</span></div>
-      <div class="igm-row">
-        <button class="igm-btn" data-market="${bet.market}" data-selection="${bet.selection}">
-          <span class="igm-btn-label">${bet.label}</span>
-          <span class="igm-btn-odds">${bet.odds.toFixed(2)}</span>
-          ${lockIcon}
-        </button>
+  const html = state.bets.map(bet => `
+    <div class="res-bet-card igm-bet-card" data-market="${bet.market}" data-selection="${bet.selection}">
+      <div class="res-bet-match">
+        <div class="res-bet-mini-score">
+          <img class="res-bet-mini-badge" src="assets/team-badges/${home.logo}" alt="">
+          <span class="res-bet-mini-result igm-live-score">0:0</span>
+          <img class="res-bet-mini-badge" src="assets/team-badges/${away.logo}" alt="">
+        </div>
+        <div class="res-bet-mini-abbrs">
+          <span>${home.abbr}</span>
+          <span>${away.abbr}</span>
+        </div>
       </div>
-    </div>`;
-  }
+      <div class="res-bet-info">
+        <span class="res-bet-placed-label">Bet Placed</span>
+        <span class="res-bet-type">${labels[bet.market]}: ${bet.label}</span>
+        <span class="res-bet-stake">Stake: $${state.stake.toFixed(2)}</span>
+      </div>
+      <div class="res-bet-outcome">
+        <span class="res-bet-odds">${bet.odds.toFixed(2)}</span>
+      </div>
+    </div>
+  `).join('');
   $('#ingameMarkets').innerHTML = html;
 }
 
@@ -618,14 +628,18 @@ function updateScoreColors(score) {
 }
 
 function updateIngameBetStates(score) {
+  const scoreStr = `${score.home}:${score.away}`;
+  document.querySelectorAll('#ingameMarkets .igm-live-score').forEach(el => {
+    el.textContent = scoreStr;
+  });
   for (const bet of state.bets) {
     const winner = getCurrentWinnerForMarket(bet.market, score);
-    const btn = document.querySelector(
-      `#ingameMarkets .igm-btn[data-market="${bet.market}"][data-selection="${bet.selection}"]`
+    const card = document.querySelector(
+      `#ingameMarkets .igm-bet-card[data-market="${bet.market}"][data-selection="${bet.selection}"]`
     );
-    if (!btn) continue;
-    btn.classList.remove('igm-selected-winning', 'igm-selected-losing');
-    btn.classList.add(bet.selection === winner ? 'igm-selected-winning' : 'igm-selected-losing');
+    if (!card) continue;
+    card.classList.remove('igm-winning', 'igm-losing');
+    card.classList.add(bet.selection === winner ? 'igm-winning' : 'igm-losing');
   }
 }
 
