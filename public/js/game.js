@@ -1006,7 +1006,7 @@ function renderHistory() {
           <div class="history-bet-row ${b.win ? 'win' : 'lost'}">
             <span class="history-bet-label">${b.description}: ${b.label}</span>
             <span class="history-bet-odds">${b.odds.toFixed(2)}</span>
-            <span class="history-bet-result">${b.win ? '+$' + b.payout.toFixed(2) : 'No Win'}</span>
+            <span class="history-bet-result-badge ${b.win ? 'win' : 'lost'}">${b.win ? '+$' + b.payout.toFixed(2) : 'No Win'}</span>
           </div>
         `).join('')}
         <div class="history-entry-footer">
