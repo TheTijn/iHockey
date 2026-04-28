@@ -225,14 +225,14 @@ input:focus-visible {
 .team-arrow {
   background: none;
   color: rgba(255, 255, 255, 0.4);
-  padding: 2px;
+  padding: 8px 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.25s ease;
   border-radius: 4px;
   opacity: 1;
-  max-height: 26px;
+  min-height: 44px;
   overflow: hidden;
 }
 @media (hover: hover) and (pointer: fine) {
@@ -730,7 +730,7 @@ input:focus-visible {
   letter-spacing: 1.5px;
 }
 .betslip-maxpay strong {
-  color: #f5a623;
+  color: #22c55e;
 }
 .betslip-toggle {
   background: none;
@@ -799,7 +799,7 @@ input:focus-visible {
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.3px;
-  color: #f5a623;
+  color: #22c55e;
 }
 .bet-item-remove {
   background: none;
@@ -987,7 +987,7 @@ input:focus-visible {
 .btn-play {
   flex: 1;
   padding: 12px 24px;
-  background: linear-gradient(135deg, #f5a623, #e8941e);
+  background: linear-gradient(135deg, #22c55e, #16a34a);
   color: #0a1120;
   font-family: "Barlow Condensed", sans-serif;
   font-size: 1.1rem;
@@ -1355,7 +1355,7 @@ input:focus-visible {
   background: #060e1c;
 }
 .res-hero.win {
-  background: radial-gradient(ellipse at 50% 110%, rgba(245, 166, 35, 0.28) 0%, #060e1c 65%);
+  background: radial-gradient(ellipse at 50% 110%, rgba(34, 197, 94, 0.28) 0%, #060e1c 65%);
 }
 .res-hero.win::before {
   content: "";
@@ -1374,7 +1374,7 @@ input:focus-visible {
   opacity: 0;
   transition: opacity 0.8s ease;
   transform-origin: 50% 48%;
-  background: conic-gradient(from 0deg at 50% 48%, transparent 0deg, rgba(245, 166, 35, 0.32) 5deg, transparent 11deg, transparent 20deg, rgba(245, 166, 35, 0.22) 25deg, transparent 31deg, transparent 40deg, rgba(245, 166, 35, 0.32) 45deg, transparent 51deg, transparent 60deg, rgba(245, 166, 35, 0.22) 65deg, transparent 71deg, transparent 80deg, rgba(245, 166, 35, 0.32) 85deg, transparent 91deg, transparent 100deg, rgba(245, 166, 35, 0.22) 105deg, transparent 111deg, transparent 120deg, rgba(245, 166, 35, 0.32) 125deg, transparent 131deg, transparent 140deg, rgba(245, 166, 35, 0.22) 145deg, transparent 151deg, transparent 160deg, rgba(245, 166, 35, 0.32) 165deg, transparent 171deg, transparent 180deg, rgba(245, 166, 35, 0.22) 185deg, transparent 191deg, transparent 200deg, rgba(245, 166, 35, 0.32) 205deg, transparent 211deg, transparent 220deg, rgba(245, 166, 35, 0.22) 225deg, transparent 231deg, transparent 240deg, rgba(245, 166, 35, 0.32) 245deg, transparent 251deg, transparent 260deg, rgba(245, 166, 35, 0.22) 265deg, transparent 271deg, transparent 280deg, rgba(245, 166, 35, 0.32) 285deg, transparent 291deg, transparent 300deg, rgba(245, 166, 35, 0.22) 305deg, transparent 311deg, transparent 320deg, rgba(245, 166, 35, 0.32) 325deg, transparent 331deg, transparent 340deg, rgba(245, 166, 35, 0.22) 345deg, transparent 351deg, transparent 360deg);
+  background: conic-gradient(from 0deg at 50% 48%, transparent 0deg, rgba(34, 197, 94, 0.32) 5deg, transparent 11deg, transparent 20deg, rgba(34, 197, 94, 0.22) 25deg, transparent 31deg, transparent 40deg, rgba(34, 197, 94, 0.32) 45deg, transparent 51deg, transparent 60deg, rgba(34, 197, 94, 0.22) 65deg, transparent 71deg, transparent 80deg, rgba(34, 197, 94, 0.32) 85deg, transparent 91deg, transparent 100deg, rgba(34, 197, 94, 0.22) 105deg, transparent 111deg, transparent 120deg, rgba(34, 197, 94, 0.32) 125deg, transparent 131deg, transparent 140deg, rgba(34, 197, 94, 0.22) 145deg, transparent 151deg, transparent 160deg, rgba(34, 197, 94, 0.32) 165deg, transparent 171deg, transparent 180deg, rgba(34, 197, 94, 0.22) 185deg, transparent 191deg, transparent 200deg, rgba(34, 197, 94, 0.32) 205deg, transparent 211deg, transparent 220deg, rgba(34, 197, 94, 0.22) 225deg, transparent 231deg, transparent 240deg, rgba(34, 197, 94, 0.32) 245deg, transparent 251deg, transparent 260deg, rgba(34, 197, 94, 0.22) 265deg, transparent 271deg, transparent 280deg, rgba(34, 197, 94, 0.32) 285deg, transparent 291deg, transparent 300deg, rgba(34, 197, 94, 0.22) 305deg, transparent 311deg, transparent 320deg, rgba(34, 197, 94, 0.32) 325deg, transparent 331deg, transparent 340deg, rgba(34, 197, 94, 0.22) 345deg, transparent 351deg, transparent 360deg);
   animation: raysRotate 18s linear infinite;
 }
 .win .res-rays {
@@ -1458,7 +1458,7 @@ input:focus-visible {
   font-size: 2rem;
   font-weight: 800;
   letter-spacing: 1px;
-  color: #f5a623;
+  color: #22c55e;
   line-height: 1.15;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
 }
@@ -1546,7 +1546,7 @@ input:focus-visible {
   line-height: 1;
 }
 .res-score-num.leading {
-  color: #f5a623;
+  color: #22c55e;
 }
 
 .res-score-sep {
@@ -1585,31 +1585,8 @@ input:focus-visible {
   position: relative;
 }
 .res-bet-card.win {
-  border-color: rgba(245, 166, 35, 0.45);
-  background: linear-gradient(105deg, rgba(245, 166, 35, 0.09) 0%, #0d1528 55%);
-}
-.res-bet-card.win::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(110deg, transparent 20%, rgba(245, 166, 35, 0.18) 45%, rgba(255, 255, 255, 0.08) 50%, rgba(245, 166, 35, 0.18) 55%, transparent 80%);
-  background-size: 220% 100%;
-  background-position: 200% 0;
-  animation: cardShimmer 2.8s ease-in-out infinite;
-  pointer-events: none;
-  border-radius: inherit;
-}
-
-@keyframes cardShimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  60% {
-    background-position: -40% 0;
-  }
-  100% {
-    background-position: -40% 0;
-  }
+  border-color: rgba(34, 197, 94, 0.55);
+  background: linear-gradient(105deg, rgba(22, 163, 74, 0.22) 0%, rgba(5, 46, 22, 0.30) 100%);
 }
 .res-bet-match {
   flex-shrink: 0;
@@ -1717,7 +1694,7 @@ input:focus-visible {
   letter-spacing: 0.3px;
 }
 .res-bet-result.won {
-  color: #f5a623;
+  color: #22c55e;
 }
 .res-bet-result.lost {
   color: #8096ad;
@@ -1946,9 +1923,35 @@ input:focus-visible {
   overflow-y: auto;
   min-height: 0;
   scrollbar-width: none;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 .ingame-markets::-webkit-scrollbar {
   display: none;
+}
+
+.igm-bet-card {
+  cursor: default;
+}
+.igm-bet-card .res-bet-outcome {
+  padding-right: 14px;
+  justify-content: center;
+}
+.res-bet-card.igm-winning {
+  border-color: rgba(34, 197, 94, 0.7);
+  background: linear-gradient(105deg, rgba(22, 163, 74, 0.32) 0%, rgba(5, 46, 22, 0.45) 100%);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.18);
+}
+.res-bet-card.igm-winning .res-bet-placed-label {
+  color: #4ade80;
+}
+.res-bet-card.igm-winning .igm-live-score {
+  color: #4ade80;
+}
+.res-bet-card.igm-losing {
+  opacity: 0.5;
 }
 
 .igm-section {
@@ -2014,11 +2017,11 @@ input:focus-visible {
   flex-shrink: 0;
 }
 .igm-btn.igm-selected-winning {
-  background: #f5a623;
-  border-color: #f5a623;
+  background: #0d9488;
+  border-color: #0d9488;
 }
 .igm-btn.igm-selected-winning .igm-btn-label, .igm-btn.igm-selected-winning .igm-btn-odds {
-  color: #0a1120;
+  color: #ffffff;
 }
 .igm-btn.igm-selected-winning .igm-lock {
   display: none;
@@ -2101,11 +2104,11 @@ input:focus-visible {
   flex-shrink: 0;
 }
 .igm-cs-btn.igm-selected-winning {
-  background: #f5a623;
-  border-color: #f5a623;
+  background: #0d9488;
+  border-color: #0d9488;
 }
 .igm-cs-btn.igm-selected-winning .igm-cs-score, .igm-cs-btn.igm-selected-winning .igm-cs-odds {
-  color: #0a1120;
+  color: #ffffff;
 }
 .igm-cs-btn.igm-selected-winning .igm-lock {
   display: none;
@@ -2408,4 +2411,239 @@ input:focus-visible {
   border-radius: 4px;
   padding: 1px 7px;
   margin-right: 4px;
+}
+
+/* ===== HISTORY OVERLAY ===== */
+.history-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 45px;
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.history-overlay.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.history-panel {
+  width: 100%;
+  max-width: 420px;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: #0a1120;
+  overflow: hidden;
+}
+@media (min-width: 480px) {
+  .history-overlay {
+    padding-top: 65px;
+  }
+  .history-panel {
+    flex: none;
+    max-height: 80vh;
+    border-radius: 0 0 10px 10px;
+  }
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: #0d1528;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.history-title {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #ffffff;
+  flex: 1;
+}
+
+.history-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  color: #8096ad;
+  transition: all 0.15s ease;
+}
+.history-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.history-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scrollbar-width: none;
+}
+.history-body::-webkit-scrollbar {
+  display: none;
+}
+
+.history-empty {
+  font-size: 0.88rem;
+  color: #8096ad;
+  text-align: center;
+  padding: 40px 16px;
+}
+
+.history-entry {
+  flex-shrink: 0;
+  background: #0d1528;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.history-entry.has-win {
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.history-entry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.history-teams {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.history-team-abbr {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.history-score {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #8096ad;
+  padding: 1px 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+}
+
+.history-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+.history-date,
+.history-time {
+  font-size: 0.72rem;
+  color: #506a85;
+  font-family: "Barlow Condensed", sans-serif;
+  letter-spacing: 0.3px;
+}
+
+.history-bet-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+.history-bet-row:last-of-type {
+  border-bottom: none;
+}
+.history-bet-row.win {
+  background: rgba(34, 197, 94, 0.07);
+}
+.history-bet-row.lost {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.history-bet-label {
+  flex: 1;
+  font-size: 0.84rem;
+  color: #b8cfe0;
+}
+
+.history-bet-odds {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 0.90rem;
+  font-weight: 700;
+  color: #ffffff;
+  min-width: 32px;
+  text-align: right;
+}
+
+.history-bet-result-badge {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 0.80rem;
+  font-weight: 700;
+  min-width: 70px;
+  text-align: center;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+}
+.history-bet-result-badge.win {
+  background: rgba(34, 197, 94, 0.18);
+  border: 1px solid rgba(34, 197, 94, 0.45);
+  color: #4ade80;
+}
+.history-bet-result-badge.lost {
+  background: rgba(220, 38, 38, 0.12);
+  border: 1px solid rgba(220, 38, 38, 0.35);
+  color: #f87171;
+}
+
+.history-entry-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 12px;
+  background: rgba(0, 0, 0, 0.18);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.history-stake {
+  font-size: 0.84rem;
+  color: #b8cfe0;
+  font-family: "Barlow Condensed", sans-serif;
+  letter-spacing: 0.3px;
+}
+
+.history-payout {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #506a85;
+}
+.history-payout.won {
+  color: #22c55e;
 }
