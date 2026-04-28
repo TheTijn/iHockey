@@ -388,6 +388,20 @@
 
   </main>
 
+  <!-- HISTORY OVERLAY -->
+  <div class="history-overlay" id="historyOverlay" role="dialog" aria-modal="true" aria-label="Bet History" aria-hidden="true">
+    <div class="history-panel">
+      <div class="history-header">
+        <span class="history-title">MY BETS</span>
+        <button class="history-close" id="btnHistoryClose" aria-label="Close bet history">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="history-body" id="historyBody">
+        <!-- filled by JS -->
+      </div>
+    </div>
+  </div><!-- /#historyOverlay -->
 
   <!-- BETSLIP (hidden until bets placed) -->
   <div class="betslip" id="betslip">

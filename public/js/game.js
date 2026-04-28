@@ -96,7 +96,7 @@ function generateH2H() {
 
 // ===== TEAM CYCLING =====
 function cycleTeam(side, direction) {
-  if (state.isPlaying || state.bets.length > 0) return;
+  if (state.isPlaying) return;
 
   const dir = direction === 'up' ? -1 : 1;
 
@@ -313,16 +313,20 @@ function handleBetToggle(btn) {
     state.bets.splice(existingIdx, 1);
     btn.classList.remove('selected');
   } else {
-    // Remove any existing bet in the same market
-    const sameMarket = state.bets.findIndex(b => b.market === market);
-    if (sameMarket > -1) {
-      const prevSel = state.bets[sameMarket].selection;
-      const selector = market === 'correctscore'
-        ? `.cs-btn[data-market="${market}"][data-selection="${prevSel}"]`
-        : `.odd-btn[data-market="${market}"][data-selection="${prevSel}"]`;
-      const prevBtn = document.querySelector(selector);
-      if (prevBtn) prevBtn.classList.remove('selected');
-      state.bets.splice(sameMarket, 1);
+    if (market === 'correctscore') {
+      // N-1 rule: allow multi-select but never all options
+      const totalOptions = CORRECT_SCORES.home.length + CORRECT_SCORES.away.length;
+      const currentCount = state.bets.filter(b => b.market === 'correctscore').length;
+      if (currentCount >= totalOptions - 1) return;
+    } else {
+      // Single selection per market — deselect any prior pick
+      const sameMarket = state.bets.findIndex(b => b.market === market);
+      if (sameMarket > -1) {
+        const prevSel = state.bets[sameMarket].selection;
+        const prevBtn = document.querySelector(`.odd-btn[data-market="${market}"][data-selection="${prevSel}"]`);
+        if (prevBtn) prevBtn.classList.remove('selected');
+        state.bets.splice(sameMarket, 1);
+      }
     }
 
     const odds = getOddsForSelection(market, selection);
@@ -387,15 +391,7 @@ function updateBetslip() {
   // Toggle betslip visibility
   $('#betslip').classList.toggle('visible', count > 0);
 
-  // Toggle team arrows hidden when bets exist
-  $$('.team-arrow').forEach(el => el.classList.toggle('hidden', count > 0));
-
-  // Disable randomize button when bets placed
-  $('#btnRandomize').disabled = count > 0;
-
-  // Toggle badge wrapper locked when bets exist
-  $('#homeBadgeWrapper').classList.toggle('locked', count > 0);
-  $('#awayBadgeWrapper').classList.toggle('locked', count > 0);
+  // Team arrows always visible; changing team will auto-clear bets
 
   // Add padding to main content when betslip visible
   $('#mainContent').classList.toggle('has-bets', count > 0);
@@ -570,51 +566,22 @@ function showInGame(score, results, payout) {
 }
 
 function buildIngameMarkets() {
-  const home = state.homeTeam;
-  const away = state.awayTeam;
   const lockIcon = `<svg class="igm-lock" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>`;
-  const chevron = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>`;
   const labels = { money: 'Match Result', spread: 'Spread', total: 'Total Goals', btts: 'Both Teams Score', correctscore: 'Correct Score' };
 
+  // Condensed slip: one row per selected bet (no unselected options shown)
   let html = '';
   for (const bet of state.bets) {
-    const { market } = bet;
-    const hdr = `<div class="igm-header"><span>${labels[market]}</span>${chevron}</div>`;
-
-    if (market === 'money') {
-      html += `<div class="igm-section">${hdr}<div class="igm-row">
-        <button class="igm-btn" data-market="money" data-selection="home"><span class="igm-btn-label">${home.abbr}</span><span class="igm-btn-odds">${state.odds.money[0].toFixed(2)}</span>${lockIcon}</button>
-        <button class="igm-btn" data-market="money" data-selection="away"><span class="igm-btn-label">${away.abbr}</span><span class="igm-btn-odds">${state.odds.money[1].toFixed(2)}</span>${lockIcon}</button>
-      </div></div>`;
-    } else if (market === 'spread') {
-      html += `<div class="igm-section">${hdr}<div class="igm-row">
-        <button class="igm-btn" data-market="spread" data-selection="home"><span class="igm-btn-label">${home.abbr} -1.5</span><span class="igm-btn-odds">${state.odds.spread[0].toFixed(2)}</span>${lockIcon}</button>
-        <button class="igm-btn" data-market="spread" data-selection="away"><span class="igm-btn-label">${away.abbr} +1.5</span><span class="igm-btn-odds">${state.odds.spread[1].toFixed(2)}</span>${lockIcon}</button>
-      </div></div>`;
-    } else if (market === 'total') {
-      html += `<div class="igm-section">${hdr}<div class="igm-row">
-        <button class="igm-btn" data-market="total" data-selection="over"><span class="igm-btn-label">O 5.5</span><span class="igm-btn-odds">${state.odds.total[0].toFixed(2)}</span>${lockIcon}</button>
-        <button class="igm-btn" data-market="total" data-selection="under"><span class="igm-btn-label">U 5.5</span><span class="igm-btn-odds">${state.odds.total[1].toFixed(2)}</span>${lockIcon}</button>
-      </div></div>`;
-    } else if (market === 'btts') {
-      html += `<div class="igm-section">${hdr}<div class="igm-row">
-        <button class="igm-btn" data-market="btts" data-selection="yes"><span class="igm-btn-label">Yes</span><span class="igm-btn-odds">${state.odds.btts[0].toFixed(2)}</span>${lockIcon}</button>
-        <button class="igm-btn" data-market="btts" data-selection="no"><span class="igm-btn-label">No</span><span class="igm-btn-odds">${state.odds.btts[1].toFixed(2)}</span>${lockIcon}</button>
-      </div></div>`;
-    } else if (market === 'correctscore') {
-      const homeScores = CORRECT_SCORES.home.map(s =>
-        `<button class="igm-cs-btn" data-market="correctscore" data-selection="${s}"><span class="igm-cs-score">${s}</span><span class="igm-cs-odds">${SCORE_ODDS[s].toFixed(2)}</span>${lockIcon}</button>`
-      ).join('');
-      const awayScores = CORRECT_SCORES.away.map(s =>
-        `<button class="igm-cs-btn" data-market="correctscore" data-selection="${s}"><span class="igm-cs-score">${s}</span><span class="igm-cs-odds">${SCORE_ODDS[s].toFixed(2)}</span>${lockIcon}</button>`
-      ).join('');
-      html += `<div class="igm-section">${hdr}
-        <div class="igm-cs-grid">
-          <div class="igm-cs-col"><div class="igm-cs-col-header">${home.abbr} wins</div>${homeScores}</div>
-          <div class="igm-cs-col"><div class="igm-cs-col-header">${away.abbr} wins</div>${awayScores}</div>
-        </div>
-      </div>`;
-    }
+    html += `<div class="igm-section">
+      <div class="igm-header"><span>${labels[bet.market]}</span></div>
+      <div class="igm-row">
+        <button class="igm-btn" data-market="${bet.market}" data-selection="${bet.selection}">
+          <span class="igm-btn-label">${bet.label}</span>
+          <span class="igm-btn-odds">${bet.odds.toFixed(2)}</span>
+          ${lockIcon}
+        </button>
+      </div>
+    </div>`;
   }
   $('#ingameMarkets').innerHTML = html;
 }
@@ -652,22 +619,13 @@ function updateScoreColors(score) {
 
 function updateIngameBetStates(score) {
   for (const bet of state.bets) {
-    const { market } = bet;
-    const winner = getCurrentWinnerForMarket(market, score);
-    const cls = market === 'correctscore' ? 'igm-cs-btn' : 'igm-btn';
-
-    document.querySelectorAll(`#ingameMarkets .${cls}[data-market="${market}"]`).forEach(btn => {
-      const sel = btn.dataset.selection;
-      btn.classList.remove('igm-selected-winning', 'igm-selected-losing', 'igm-current-winner');
-
-      if (sel === bet.selection && sel === winner) {
-        btn.classList.add('igm-selected-winning');
-      } else if (sel === bet.selection) {
-        btn.classList.add('igm-selected-losing');
-      } else if (sel === winner) {
-        btn.classList.add('igm-current-winner');
-      }
-    });
+    const winner = getCurrentWinnerForMarket(bet.market, score);
+    const btn = document.querySelector(
+      `#ingameMarkets .igm-btn[data-market="${bet.market}"][data-selection="${bet.selection}"]`
+    );
+    if (!btn) continue;
+    btn.classList.remove('igm-selected-winning', 'igm-selected-losing');
+    btn.classList.add(bet.selection === winner ? 'igm-selected-winning' : 'igm-selected-losing');
   }
 }
 
@@ -874,6 +832,8 @@ function showResult(score, results, totalPayout) {
 
   // For loss state, show overlay now (win state shows it earlier, before rAF coin setup)
   if (!won) $('#resultOverlay').classList.add('visible');
+
+  saveGameToHistory(score, results, totalPayout);
 }
 
 // ===== AUTO BET =====
@@ -906,6 +866,142 @@ function autoBet() {
   }
 
   updateBetslip();
+}
+
+// ===== BET HISTORY =====
+const DUMMY_HISTORY = [
+  {
+    id: 'RND4812903',
+    date: 'Apr 27, 2026', time: '4:45 PM',
+    homeTeam: 'BOS', awayTeam: 'TOR',
+    score: { home: 3, away: 2 },
+    bets: [{ description: 'Money', label: 'BOS', odds: 1.75, win: true, payout: 8.75 }],
+    stake: 5, totalPayout: 8.75
+  },
+  {
+    id: 'RND7203541',
+    date: 'Apr 27, 2026', time: '3:12 PM',
+    homeTeam: 'NYR', awayTeam: 'PIT',
+    score: { home: 1, away: 4 },
+    bets: [
+      { description: 'Money', label: 'NYR', odds: 1.90, win: false, payout: 0 },
+      { description: 'Total', label: 'Over 5.5', odds: 1.88, win: false, payout: 0 }
+    ],
+    stake: 2, totalPayout: 0
+  },
+  {
+    id: 'RND9381047',
+    date: 'Apr 26, 2026', time: '6:30 PM',
+    homeTeam: 'CHI', awayTeam: 'DET',
+    score: { home: 4, away: 3 },
+    bets: [
+      { description: 'Spread', label: 'CHI -1.5', odds: 2.40, win: true, payout: 12.00 },
+      { description: 'BTTS', label: 'Yes', odds: 1.72, win: true, payout: 8.60 }
+    ],
+    stake: 5, totalPayout: 20.60
+  },
+  {
+    id: 'RND1053928',
+    date: 'Apr 26, 2026', time: '2:00 PM',
+    homeTeam: 'VAN', awayTeam: 'EDM',
+    score: { home: 2, away: 6 },
+    bets: [{ description: 'Correct Score', label: '2-6', odds: 22.00, win: true, payout: 22.00 }],
+    stake: 1, totalPayout: 22.00
+  },
+  {
+    id: 'RND6620183',
+    date: 'Apr 25, 2026', time: '11:15 AM',
+    homeTeam: 'FLA', awayTeam: 'TBL',
+    score: { home: 3, away: 3 },
+    bets: [
+      { description: 'Total', label: 'Under 5.5', odds: 1.90, win: false, payout: 0 },
+      { description: 'Money', label: 'FLA', odds: 1.85, win: false, payout: 0 }
+    ],
+    stake: 10, totalPayout: 0
+  }
+];
+
+function getHistory() {
+  try {
+    const stored = sessionStorage.getItem('ihockey_history');
+    const session = stored ? JSON.parse(stored) : [];
+    return [...session, ...DUMMY_HISTORY];
+  } catch (e) {
+    return [...DUMMY_HISTORY];
+  }
+}
+
+function saveGameToHistory(score, results, totalPayout) {
+  try {
+    const stored = sessionStorage.getItem('ihockey_history');
+    const history = stored ? JSON.parse(stored) : [];
+    const now = new Date();
+    history.unshift({
+      id: `RND${Math.floor(1000000 + Math.random() * 9000000)}`,
+      date: now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      time: now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }),
+      homeTeam: state.homeTeam.abbr,
+      awayTeam: state.awayTeam.abbr,
+      score,
+      bets: results.map(r => ({ description: r.description, label: r.label, odds: r.odds, win: r.win, payout: r.payout })),
+      stake: state.stake,
+      totalPayout
+    });
+    if (history.length > 50) history.pop();
+    sessionStorage.setItem('ihockey_history', JSON.stringify(history));
+  } catch (e) { /* sessionStorage unavailable */ }
+}
+
+function openHistoryPanel() {
+  renderHistory();
+  $('#historyOverlay').removeAttribute('aria-hidden');
+  $('#historyOverlay').classList.add('visible');
+  $('#btnHistoryClose').focus();
+}
+
+function closeHistoryPanel() {
+  $('#historyOverlay').setAttribute('aria-hidden', 'true');
+  $('#historyOverlay').classList.remove('visible');
+  $('#btnHistory').focus();
+}
+
+function renderHistory() {
+  const history = getHistory();
+  const body = $('#historyBody');
+  if (history.length === 0) {
+    body.innerHTML = `<p class="history-empty">No bets yet. Play a round to see your history.</p>`;
+    return;
+  }
+  body.innerHTML = history.map(entry => {
+    const hasWin = entry.bets.some(b => b.win);
+    const totalPayout = entry.totalPayout ?? entry.bets.reduce((s, b) => s + b.payout, 0);
+    return `
+      <div class="history-entry ${hasWin ? 'has-win' : 'all-lost'}">
+        <div class="history-entry-header">
+          <div class="history-teams">
+            <span class="history-team-abbr">${entry.homeTeam}</span>
+            <span class="history-score">${entry.score.home}–${entry.score.away}</span>
+            <span class="history-team-abbr">${entry.awayTeam}</span>
+          </div>
+          <div class="history-meta">
+            <span class="history-date">${entry.date}</span>
+            <span class="history-time">${entry.time}</span>
+          </div>
+        </div>
+        ${entry.bets.map(b => `
+          <div class="history-bet-row ${b.win ? 'win' : 'lost'}">
+            <span class="history-bet-label">${b.description}: ${b.label}</span>
+            <span class="history-bet-odds">${b.odds.toFixed(2)}</span>
+            <span class="history-bet-result">${b.win ? '+$' + b.payout.toFixed(2) : 'No Win'}</span>
+          </div>
+        `).join('')}
+        <div class="history-entry-footer">
+          <span class="history-stake">Stake: $${entry.stake} × ${entry.bets.length}</span>
+          <span class="history-payout ${hasWin ? 'won' : ''}">${hasWin ? 'Return: $' + totalPayout.toFixed(2) : 'No Return'}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 // ===== AUTO PLAY OPTIONS PANEL =====
@@ -1104,9 +1200,14 @@ function positionBetslip() {
   const main = $('#mainContent');
   const mainRect = main.getBoundingClientRect();
   const offset = window.innerHeight - mainRect.bottom;
-  // On desktop the card doesn't reach the viewport bottom — anchor betslip to card bottom.
-  // On mobile (offset ≈ 0) bottom: 0 is correct; CSS env() handles safe-area.
-  betslip.style.bottom = Math.max(0, Math.round(offset)) + 'px';
+  // Only apply JS offset on desktop where the card floats above the viewport bottom.
+  // On mobile/iOS (offset ≈ 0) clear the inline style so CSS `bottom: 0` + env()
+  // safe-area handles positioning natively — avoids iOS fixed-positioning glitches.
+  if (offset > 4) {
+    betslip.style.bottom = Math.round(offset) + 'px';
+  } else {
+    betslip.style.bottom = '';
+  }
 }
 
 // ===== EVENT BINDING =====
@@ -1125,7 +1226,7 @@ function bindEvents() {
 
   // Randomize teams button
   $('#btnRandomize').addEventListener('click', () => {
-    if (state.isPlaying || state.bets.length > 0) return;
+    if (state.isPlaying) return;
     loadNewMatch();
   });
 
@@ -1221,6 +1322,13 @@ function bindEvents() {
 
   // In-game skip
   $('#btnSkipIngame').addEventListener('click', skipIngame);
+
+  // History overlay
+  $('#btnHistory').addEventListener('click', openHistoryPanel);
+  $('#btnHistoryClose').addEventListener('click', closeHistoryPanel);
+  $('#historyOverlay').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeHistoryPanel();
+  });
 
   // Help overlay
   $('#btnHelp').addEventListener('click', () => {
