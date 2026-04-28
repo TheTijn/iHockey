@@ -120,7 +120,17 @@ function cycleTeam(side, direction) {
 
   const savedBets = state.bets;
   loadMatch();
-  state.bets = savedBets;
+  state.bets = savedBets.map(b => ({
+    ...b,
+    label: getBetLabel(b.market, b.selection),
+    odds: getOddsForSelection(b.market, b.selection),
+  }));
+  renderMarkets();
+  // Re-highlight selected buttons after market re-render
+  for (const b of state.bets) {
+    const btn = document.querySelector(`.odd-btn[data-market="${b.market}"][data-selection="${b.selection}"], .cs-btn[data-selection="${b.selection}"]`);
+    if (btn) btn.classList.add('selected');
+  }
   updateBetslip();
 }
 
