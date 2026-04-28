@@ -959,7 +959,7 @@ button {
 .btn-play {
   flex: 1;
   padding: 12px 24px;
-  background: linear-gradient(135deg, #f5a623, #e8941e);
+  background: linear-gradient(135deg, #22c55e, #16a34a);
   color: #0a1120;
   font-family: "Barlow Condensed", sans-serif;
   font-size: 1.1rem;
