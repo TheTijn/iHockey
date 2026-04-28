@@ -6,13 +6,11 @@
   "scripts": {
     "sass": "sass scss/style.scss public/css/style.css",
     "sass:watch": "sass --watch scss/style.scss public/css/style.css",
-    "start": "node server.js",
+    "start": "npm run sass && node server.js",
     "dev": "npm run sass:watch & node --watch server.js"
   },
   "dependencies": {
-    "express": "^4.21.0"
-  },
-  "devDependencies": {
+    "express": "^4.21.0",
     "sass": "^1.99.0"
   }
 }

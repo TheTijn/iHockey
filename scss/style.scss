@@ -14,6 +14,9 @@ $accent-light: #80e8df;
 $accent-gold: #f5a623;
 $accent-gold-dark: #e8941e;
 $accent-red: #ff6b6b;
+$win-green: #22c55e;
+$win-green-dark: #16a34a;
+$win-green-light: #4ade80;
 
 $border-subtle: rgba(255, 255, 255, 0.06);
 $border-light: rgba(255, 255, 255, 0.08);
@@ -103,11 +106,16 @@ body {
 button {
   cursor: pointer;
   border: none;
-  outline: none;
   font-family: inherit;
   -webkit-appearance: none;
   appearance: none;
   background: none;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #4a90d9;
+  outline-offset: 2px;
 }
 
 // ===== APP WRAPPER =====
@@ -312,12 +320,12 @@ button {
 .team-arrow {
   background: none;
   color: rgba(255, 255, 255, 0.4);
-  padding: 2px;
+  padding: 8px 12px;
   @include flex-center;
   transition: all 0.25s ease;
   border-radius: $radius-sm;
   opacity: 1;
-  max-height: 26px;
+  min-height: 44px;
   overflow: hidden;
 
   &:hover {
@@ -759,7 +767,7 @@ button {
     }
   }
 
-  &-maxpay strong { color: $accent-gold; }
+  &-maxpay strong { color: $win-green; }
 
   &-toggle {
     background: none;
@@ -823,8 +831,8 @@ button {
   }
 
   &-pay {
-    @include condensed(0.75rem, 600, 0.3px);
-    color: $accent-gold;
+    @include condensed(0.84rem, 600, 0.3px);
+    color: $win-green;
   }
 
   &-remove {
@@ -923,8 +931,9 @@ button {
   }
 
   &.active {
-    background: $accent-gold;
-    color: $bg-primary;
+    background: rgba($accent, 0.15);
+    border: 1px solid $accent;
+    color: $accent-light;
   }
 }
 
@@ -985,7 +994,7 @@ button {
 .btn-play {
   flex: 1;
   padding: 12px 24px;
-  background: linear-gradient(135deg, $accent-gold, $accent-gold-dark);
+  background: linear-gradient(135deg, $win-green, $win-green-dark);
   color: $bg-primary;
   @include condensed(1.1rem, 800, 2px);
   border-radius: $radius-lg;
@@ -1283,13 +1292,22 @@ button {
 
 // ===== RESULT VIEW =====
 .result-overlay {
-  display: none;
+  display: flex;
   flex-direction: column;
   height: 100%;
   overflow: hidden;
   background: $bg-primary;
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease-out;
 
-  &.visible { display: flex; }
+  &.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
 }
 
 .res-hero {
@@ -1301,7 +1319,7 @@ button {
   background: #060e1c;
 
   &.win {
-    background: radial-gradient(ellipse at 50% 110%, rgba($accent-gold, 0.28) 0%, #060e1c 65%);
+    background: radial-gradient(ellipse at 50% 110%, rgba($win-green, 0.28) 0%, #060e1c 65%);
 
     // Dark elliptical vignette between rays and text — boosts text contrast
     &::before {
@@ -1327,58 +1345,58 @@ button {
   background: conic-gradient(
     from 0deg at 50% 48%,
     transparent        0deg,
-    rgba($accent-gold, 0.32)  5deg,
+    rgba($win-green, 0.32)  5deg,
     transparent       11deg,
     transparent       20deg,
-    rgba($accent-gold, 0.22) 25deg,
+    rgba($win-green, 0.22) 25deg,
     transparent       31deg,
     transparent       40deg,
-    rgba($accent-gold, 0.32) 45deg,
+    rgba($win-green, 0.32) 45deg,
     transparent       51deg,
     transparent       60deg,
-    rgba($accent-gold, 0.22) 65deg,
+    rgba($win-green, 0.22) 65deg,
     transparent       71deg,
     transparent       80deg,
-    rgba($accent-gold, 0.32) 85deg,
+    rgba($win-green, 0.32) 85deg,
     transparent       91deg,
     transparent      100deg,
-    rgba($accent-gold, 0.22) 105deg,
+    rgba($win-green, 0.22) 105deg,
     transparent      111deg,
     transparent      120deg,
-    rgba($accent-gold, 0.32) 125deg,
+    rgba($win-green, 0.32) 125deg,
     transparent      131deg,
     transparent      140deg,
-    rgba($accent-gold, 0.22) 145deg,
+    rgba($win-green, 0.22) 145deg,
     transparent      151deg,
     transparent      160deg,
-    rgba($accent-gold, 0.32) 165deg,
+    rgba($win-green, 0.32) 165deg,
     transparent      171deg,
     transparent      180deg,
-    rgba($accent-gold, 0.22) 185deg,
+    rgba($win-green, 0.22) 185deg,
     transparent      191deg,
     transparent      200deg,
-    rgba($accent-gold, 0.32) 205deg,
+    rgba($win-green, 0.32) 205deg,
     transparent      211deg,
     transparent      220deg,
-    rgba($accent-gold, 0.22) 225deg,
+    rgba($win-green, 0.22) 225deg,
     transparent      231deg,
     transparent      240deg,
-    rgba($accent-gold, 0.32) 245deg,
+    rgba($win-green, 0.32) 245deg,
     transparent      251deg,
     transparent      260deg,
-    rgba($accent-gold, 0.22) 265deg,
+    rgba($win-green, 0.22) 265deg,
     transparent      271deg,
     transparent      280deg,
-    rgba($accent-gold, 0.32) 285deg,
+    rgba($win-green, 0.32) 285deg,
     transparent      291deg,
     transparent      300deg,
-    rgba($accent-gold, 0.22) 305deg,
+    rgba($win-green, 0.22) 305deg,
     transparent      311deg,
     transparent      320deg,
-    rgba($accent-gold, 0.32) 325deg,
+    rgba($win-green, 0.32) 325deg,
     transparent      331deg,
     transparent      340deg,
-    rgba($accent-gold, 0.22) 345deg,
+    rgba($win-green, 0.22) 345deg,
     transparent      351deg,
     transparent      360deg
   );
@@ -1445,7 +1463,7 @@ button {
 
 .res-amount {
   @include condensed(2rem, 800, 1px);
-  color: $accent-gold;
+  color: $win-green;
   line-height: 1.15;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
 }
@@ -1522,7 +1540,7 @@ button {
   color: $text-white;
   line-height: 1;
 
-  &.leading { color: $accent-gold; }
+  &.leading { color: $win-green; }
 }
 
 .res-score-sep {
@@ -1555,34 +1573,20 @@ button {
   position: relative;
 
   &.win {
-    border-color: rgba($accent-gold, 0.45);
-    background: linear-gradient(105deg, rgba($accent-gold, 0.09) 0%, $bg-panel 55%);
-
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        110deg,
-        transparent 20%,
-        rgba($accent-gold, 0.18) 45%,
-        rgba(#fff, 0.08) 50%,
-        rgba($accent-gold, 0.18) 55%,
-        transparent 80%
-      );
-      background-size: 220% 100%;
-      background-position: 200% 0;
-      animation: cardShimmer 2.8s ease-in-out infinite;
-      pointer-events: none;
-      border-radius: inherit;
-    }
+    border-color: rgba($win-green, 0.55);
+    background: linear-gradient(105deg, rgba($win-green-dark, 0.22) 0%, rgba(5, 46, 22, 0.30) 100%);
   }
-}
 
-@keyframes cardShimmer {
-  0%   { background-position: 200% 0; }
-  60%  { background-position: -40% 0; }
-  100% { background-position: -40% 0; }
+  &.igm-winning {
+    border-color: rgba(#0d9488, 0.6);
+    background: linear-gradient(105deg, rgba(#0d9488, 0.18) 0%, rgba(4, 40, 37, 0.28) 100%);
+    box-shadow: 0 0 12px rgba($win-green, 0.18);
+
+    .res-bet-placed-label { color: $win-green-light; }
+    .igm-live-score { color: $win-green-light; }
+  }
+
+  &.igm-losing { opacity: 0.5; }
 }
 
 .res-bet-match {
@@ -1670,7 +1674,7 @@ button {
 .res-bet-result {
   @include condensed(0.75rem, 700, 0.3px);
 
-  &.won  { color: $accent-gold; }
+  &.won  { color: $win-green; }
   &.lost { color: $text-muted; }
 }
 
@@ -1931,9 +1935,9 @@ button {
   .igm-lock { color: rgba($text-white, 0.18); flex-shrink: 0; }
 
   &.igm-selected-winning {
-    background: $accent-gold;
-    border-color: $accent-gold;
-    .igm-btn-label, .igm-btn-odds { color: $bg-primary; }
+    background: #0d9488;
+    border-color: #0d9488;
+    .igm-btn-label, .igm-btn-odds { color: $text-white; }
     .igm-lock { display: none; }
   }
 
@@ -1995,9 +1999,9 @@ button {
   .igm-lock { color: rgba($text-white, 0.16); flex-shrink: 0; }
 
   &.igm-selected-winning {
-    background: $accent-gold;
-    border-color: $accent-gold;
-    .igm-cs-score, .igm-cs-odds { color: $bg-primary; }
+    background: #0d9488;
+    border-color: #0d9488;
+    .igm-cs-score, .igm-cs-odds { color: $text-white; }
     .igm-lock { display: none; }
   }
 
@@ -2058,7 +2062,7 @@ button {
 
 @keyframes igmScoreBump {
   0% { transform: scale(1); }
-  40% { transform: scale(1.5); color: $text-white; }
+  35% { transform: scale(1.28); }
   100% { transform: scale(1); }
 }
 
@@ -2070,8 +2074,8 @@ button {
 
 @keyframes teamSwap {
   0% { opacity: 1; transform: scale(1); }
-  40% { opacity: 0; transform: scale(0.85); }
-  60% { opacity: 0; transform: scale(0.85); }
+  40% { opacity: 0; transform: scale(0.92); }
+  60% { opacity: 0; transform: scale(0.95); }
   100% { opacity: 1; transform: scale(1); }
 }
 
@@ -2229,10 +2233,217 @@ button {
 .help-tag {
   display: inline-block;
   @include condensed(0.78rem, 700, 0.5px);
-  color: $accent-gold;
-  background: rgba($accent-gold, 0.12);
-  border: 1px solid rgba($accent-gold, 0.3);
+  color: $win-green;
+  background: rgba($win-green, 0.12);
+  border: 1px solid rgba($win-green, 0.3);
   border-radius: $radius-sm;
   padding: 1px 7px;
   margin-right: 4px;
+}
+
+// ===== MY BETS HISTORY OVERLAY =====
+.history-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 45px;
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  @media (min-width: 480px) {
+    padding-top: 65px;
+  }
+}
+
+.history-panel {
+  width: 100%;
+  max-width: $max-width;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: #0a1120;
+  overflow: hidden;
+
+  @media (min-width: 480px) {
+    flex: none;
+    max-height: 80vh;
+    border-radius: 0 0 10px 10px;
+  }
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: $bg-panel;
+  border-bottom: 1px solid $border-subtle;
+  flex-shrink: 0;
+}
+
+.history-title {
+  flex: 1;
+  @include condensed(1.1rem, 800, 2px);
+  color: $text-white;
+  text-transform: uppercase;
+}
+
+.history-close {
+  @include flex-center;
+  width: 32px;
+  height: 32px;
+  color: $text-muted;
+  border-radius: $radius-md;
+  transition: color 0.2s;
+
+  &:hover { color: $text-white; }
+}
+
+.history-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.history-empty {
+  @include flex-center;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  color: $text-faint;
+  font-size: 0.9rem;
+}
+
+.history-entry {
+  flex-shrink: 0;
+  background: #0d1528;
+  border: 1px solid $border-subtle;
+  border-radius: $radius-lg;
+  overflow: hidden;
+}
+
+.history-entry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid $border-subtle;
+}
+
+.history-teams {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.history-team-abbr {
+  @include condensed(0.9rem, 800, 1px);
+  color: $text-white;
+}
+
+.history-score-badge {
+  @include condensed(0.78rem, 700, 0.5px);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid $border-light;
+  border-radius: $radius-sm;
+  padding: 1px 6px;
+  color: $text-muted;
+}
+
+.history-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+.history-date,
+.history-time {
+  @include condensed(0.72rem, 600, 0.3px);
+  color: $text-faint;
+}
+
+.history-bet-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+
+  &:last-of-type { border-bottom: none; }
+
+  &.win { background: rgba($win-green, 0.07); }
+  &.lost { background: rgba(255, 255, 255, 0.02); }
+}
+
+.history-bet-label {
+  flex: 1;
+  font-size: 0.84rem;
+  color: #b8cfe0;
+}
+
+.history-bet-odds {
+  @include condensed(0.90rem, 700);
+  color: $text-white;
+  min-width: 32px;
+  text-align: right;
+}
+
+.history-bet-result-badge {
+  @include condensed(0.80rem, 700, 0.3px);
+  min-width: 70px;
+  text-align: center;
+  padding: 3px 8px;
+  border-radius: $radius-sm;
+
+  &.win {
+    background: rgba($win-green, 0.18);
+    border: 1px solid rgba($win-green, 0.45);
+    color: $win-green-light;
+  }
+
+  &.lost {
+    background: rgba(220, 38, 38, 0.12);
+    border: 1px solid rgba(220, 38, 38, 0.35);
+    color: #f87171;
+  }
+}
+
+.history-entry-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 12px;
+  background: rgba(0, 0, 0, 0.18);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.history-stake {
+  @include condensed(0.84rem, 600, 0.3px);
+  color: #b8cfe0;
+}
+
+.history-payout {
+  @include condensed(0.84rem, 700, 0.3px);
+  color: $text-faint;
+
+  &.won { color: $win-green; }
 }
