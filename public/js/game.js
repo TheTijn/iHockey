@@ -118,7 +118,10 @@ function cycleTeam(side, direction) {
   teamEl.classList.add('team-swapping');
   setTimeout(() => teamEl.classList.remove('team-swapping'), 350);
 
+  const savedBets = state.bets;
   loadMatch();
+  state.bets = savedBets;
+  updateBetslip();
 }
 
 function selectTeamFromPanel(teamIndex) {
