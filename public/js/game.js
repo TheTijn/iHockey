@@ -638,8 +638,11 @@ function updateIngameBetStates(score) {
       `#ingameMarkets .igm-bet-card[data-market="${bet.market}"][data-selection="${bet.selection}"]`
     );
     if (!card) continue;
+    const isWinning = bet.selection === winner;
     card.classList.remove('igm-winning', 'igm-losing');
-    card.classList.add(bet.selection === winner ? 'igm-winning' : 'igm-losing');
+    card.classList.add(isWinning ? 'igm-winning' : 'igm-losing');
+    const label = card.querySelector('.res-bet-placed-label');
+    if (label) label.textContent = isWinning ? 'WINNING' : 'BET PLACED';
   }
 }
 
