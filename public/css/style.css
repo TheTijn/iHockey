@@ -110,6 +110,10 @@ input:focus-visible {
   height: calc(100dvh - 45px);
   overflow-y: auto;
   background: #0a1120;
+  scrollbar-width: none;
+}
+.main-content::-webkit-scrollbar {
+  display: none;
 }
 .main-content.has-bets {
   padding-bottom: 140px;
