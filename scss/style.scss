@@ -1864,7 +1864,7 @@ input:focus-visible {
   @include condensed(3rem, 800, 0);
   color: $text-white;
   line-height: 1;
-  &.score-leading { color: $accent-gold; }
+  &.score-leading { color: $win-green; }
   min-width: 34px;
   text-align: center;
 
