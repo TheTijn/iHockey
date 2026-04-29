@@ -131,7 +131,8 @@ input:focus-visible {
   .main-content {
     box-shadow: 0 0 20px #191837;
     border-radius: 0 0 10px 10px;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
   .betslip {
     border-radius: 0 0 10px 10px;
