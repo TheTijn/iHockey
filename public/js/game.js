@@ -459,6 +459,20 @@ function removeBet(index) {
 }
 
 // ===== GAME SIMULATION =====
+function generateRandomTimeline() {
+  // Weight home/away probability by money line odds so the result feels meaningful
+  const homeOdds = state.odds.money[0];
+  const awayOdds = state.odds.money[1];
+  const homeProb = (1 / homeOdds) / (1 / homeOdds + 1 / awayOdds);
+
+  let h = 0, a = 0;
+  return VIDEO_TIMELINE.map(event => {
+    if (Math.random() < homeProb) h++;
+    else a++;
+    return { time: event.time, home: h, away: a };
+  });
+}
+
 function simulateMatch() {
   const homeGoals = weightedRandomGoals();
   const awayGoals = weightedRandomGoals();
@@ -532,8 +546,9 @@ function playGame() {
   setTimeout(() => {
     document.body.classList.remove('simulating');
 
-    ingame.timeline = VIDEO_TIMELINE;
-    const score = VIDEO_FINAL_SCORE;
+    ingame.timeline = generateRandomTimeline();
+    const last = ingame.timeline[ingame.timeline.length - 1];
+    const score = { home: last.home, away: last.away };
 
     const results = evaluateBets(score);
     const totalPayout = results.reduce((sum, r) => sum + r.payout, 0);
@@ -736,14 +751,11 @@ function finishIngame() {
   detachVideoListeners();
   ingame.timers.forEach(clearTimeout);
   const { finalScore, results, payout } = ingame;
-  const last = ingame.timeline.length > 0
-    ? ingame.timeline[ingame.timeline.length - 1]
-    : { home: finalScore.home, away: finalScore.away };
-  $('#ingameLiveHomeScore').textContent = last.home;
-  $('#ingameLiveAwayScore').textContent = last.away;
+  $('#ingameLiveHomeScore').textContent = finalScore.home;
+  $('#ingameLiveAwayScore').textContent = finalScore.away;
   $('#ingameMinute').textContent = '1:40';
-  updateIngameBetStates({ home: last.home, away: last.away });
-  updateScoreColors({ home: last.home, away: last.away });
+  updateIngameBetStates({ home: finalScore.home, away: finalScore.away });
+  updateScoreColors({ home: finalScore.home, away: finalScore.away });
   $('#ingameView').classList.remove('active');
   showResult(finalScore, results, payout);
 }
