@@ -1881,6 +1881,10 @@ input:focus-visible {
   overflow-y: auto;
   min-height: 0; // required so flex child can shrink below content height
   scrollbar-width: none;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   &::-webkit-scrollbar { display: none; }
 }
 
