@@ -64,6 +64,13 @@ function loadMatch() {
   state.homeTeam = TEAMS[state.homeIndex];
   state.awayTeam = TEAMS[state.awayIndex];
 
+  // Reset view state from any previous game
+  $('#gameContent').hidden = false;
+  $('#ingameView').classList.remove('active');
+  $('#ingameVideo').pause();
+  $('#betslip').classList.remove('force-hidden');
+  $('#resultOverlay').classList.remove('visible');
+
   // Pick random odds template
   state.odds = { ...ODDS_TEMPLATES[Math.floor(Math.random() * ODDS_TEMPLATES.length)] };
 
